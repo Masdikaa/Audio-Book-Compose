@@ -50,7 +50,8 @@ fun TopTitle(
             style = TextStyle(
                 platformStyle = PlatformTextStyle(
                     includeFontPadding = true
-                ), lineHeightStyle = LineHeightStyle(
+                ),
+                lineHeightStyle = LineHeightStyle(
                     trim = LineHeightStyle.Trim.Both,
                     alignment = LineHeightStyle.Alignment.Center,
                 )
@@ -64,11 +65,9 @@ fun TopTitle(
             modifier = modifier
                 .size(iconSize + 5.dp)
                 .wrapContentHeight()
-                .clickable(
-                    onClick = {
-                        onSearchIconClicked()
-                    }
-                )
+                .clickable {
+                    onSearchIconClicked()
+                }
         )
     }
 }

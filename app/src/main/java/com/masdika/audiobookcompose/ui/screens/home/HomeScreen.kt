@@ -1,53 +1,61 @@
 package com.masdika.audiobookcompose.ui.screens.home
 
-import android.content.res.Configuration
-import androidx.compose.foundation.Image
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
 import com.masdika.audiobookcompose.R
+import com.masdika.audiobookcompose.data.model.AudioBook
+import com.masdika.audiobookcompose.data.model.audioBookList
+import com.masdika.audiobookcompose.data.model.genreList
+import com.masdika.audiobookcompose.ui.screens.home.components.AudioBookCard
+import com.masdika.audiobookcompose.ui.screens.home.components.GenreList
+import com.masdika.audiobookcompose.ui.screens.home.components.RecentlyPlayedCard
 import com.masdika.audiobookcompose.ui.screens.home.components.TopTitle
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
-import com.masdika.audiobookcompose.ui.theme.GothamProRegular
 
 @Composable
 fun HomeScreen(
+    audioBooks: List<AudioBook>,
     onSearchIconClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = MaterialTheme.colorScheme.background
-    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
+//    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
+    var selectedIndex by remember { mutableIntStateOf(0) }
+
+    val filteredAudioBooks by remember(selectedIndex, audioBooks) {
+        mutableStateOf(
+            if (selectedIndex == 0) {
+                audioBooks
+            } else {
+                val selectedGenreName = genreList[selectedIndex - 1].name
+                audioBooks.filter { audioBook ->
+                    audioBook.genre.any { it.name == selectedGenreName }
+                }
+            }
+        )
+    }
 
     Scaffold(
         modifier = modifier
@@ -64,99 +72,39 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             TopTitle(
-                onSearchIconClicked = {},
+                onSearchIconClicked = onSearchIconClicked,
                 modifier = Modifier.fillMaxHeight(0.1f)
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.32f)
-                    .clip(RoundedCornerShape(30.dp))
+            RecentlyPlayedCard(
+                author = "Yuval Noah Harari",
+                hourLeft = 8,
+                minuteLeft = 24,
+                backgroundImage = painterResource(R.drawable.sample),
+                title = "Sapiens. A Brief History of Humankind",
+            )
+            Spacer(Modifier.fillMaxHeight(0.02f))
+            GenreList(
+                genres = genreList,
+                selectedIndex = selectedIndex,
+                onGenreSelected = { newIndex ->
+                    selectedIndex = newIndex
+                }
+            )
+            Spacer(Modifier.fillMaxHeight(0.02f))
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Image(
-                    painter = painterResource(R.drawable.sample),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colorStops = arrayOf(
-                                    0f to Color.Black.copy(0.7f),
-                                    0.3f to Color.Transparent,
-                                    0.8f to Color.Black.copy(0.7f),
-                                    1f to Color.Black.copy(0.7f)
-                                )
-                            )
+                item {
+                    filteredAudioBooks.forEach { item ->
+                        AudioBookCard(
+                            author = item.author,
+                            title = item.title,
+                            synopsys = item.synopsys,
+                            rating = item.rating,
+                            image = item.imageID
                         )
-                        .padding(20.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.Top,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                    ) {
-                        Text(
-                            text = "Yuval Noah",
-                            fontSize = 18.sp,
-                            fontFamily = GothamProRegular,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = TextStyle(
-                                platformStyle = PlatformTextStyle(
-                                    includeFontPadding = true
-                                ), lineHeightStyle = LineHeightStyle(
-                                    trim = LineHeightStyle.Trim.Both,
-                                    alignment = LineHeightStyle.Alignment.Center,
-                                )
-                            ),
-                            color = Color.White
-                        )
-                        Spacer(Modifier.fillMaxHeight(0.02f))
-                        Text(
-                            text = buildAnnotatedString {
-                                append("8h 24m")
-                                withStyle(
-                                    SpanStyle(
-                                        color = Color.White.copy(0.7f)
-                                    )
-                                ) {
-                                    append(" left")
-                                }
-                            },
-                            fontSize = 16.sp,
-                            fontFamily = GothamProRegular,
-                            fontWeight = FontWeight.Bold,
-                            style = TextStyle(
-                                platformStyle = PlatformTextStyle(
-                                    includeFontPadding = true
-                                ), lineHeightStyle = LineHeightStyle(
-                                    trim = LineHeightStyle.Trim.Both,
-                                    alignment = LineHeightStyle.Alignment.Center,
-                                )
-                            ),
-                            color = Color.White
-                        )
+                        Spacer(Modifier.height(20.dp))
                     }
-                    Text(
-                        text = "Sapiens. A Brief History of Humankind",
-                        fontSize = 30.sp,
-                        fontFamily = GothamProRegular,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        style = TextStyle(
-                            lineHeight = 1.2.em
-                        ),
-                        color = Color.White
-                    )
                 }
             }
         }
@@ -168,19 +116,22 @@ fun HomeScreen(
     showBackground = true,
     widthDp = 425,
     heightDp = 944,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
+    uiMode = UI_MODE_NIGHT_NO
 )
 @Preview(
     name = "Home Screen Dark Mode",
     showBackground = true,
     widthDp = 425,
     heightDp = 944,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    uiMode = UI_MODE_NIGHT_YES
 )
 @Composable
 private fun HomeScreenPreview() {
     AudioBookComposeTheme {
-        HomeScreen({})
+        HomeScreen(
+            audioBooks = audioBookList,
+            onSearchIconClicked = {}
+        )
     }
 }
 

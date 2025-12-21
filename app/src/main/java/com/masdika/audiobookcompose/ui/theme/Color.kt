@@ -1,6 +1,5 @@
 package com.masdika.audiobookcompose.ui.theme
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -15,3 +14,6 @@ val Night = Color(0xFF010101)
 val JeansBlue = Color(0xFFA5D3E0)
 val PersianRed = Color(0xFFCD2F2F)
 val RaspberryPink = Color(0xFFDE4596)
+val White = Color.White
+val Black = Color.Black
+val Transparent = Color.Transparent

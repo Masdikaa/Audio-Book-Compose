@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.masdika.audiobookcompose.data.model.audioBookList
 import com.masdika.audiobookcompose.ui.screens.home.HomeScreen
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 
@@ -13,7 +14,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AudioBookComposeTheme {
-                HomeScreen({})
+                HomeScreen(
+                    audioBookList,
+                    onSearchIconClicked = {},
+                )
             }
         }
     }
