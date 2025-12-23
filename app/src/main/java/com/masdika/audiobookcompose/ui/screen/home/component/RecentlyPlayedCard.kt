@@ -1,4 +1,4 @@
-package com.masdika.audiobookcompose.ui.screens.home.components
+package com.masdika.audiobookcompose.ui.screen.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

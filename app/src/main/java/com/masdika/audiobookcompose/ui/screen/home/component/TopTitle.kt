@@ -1,4 +1,4 @@
-package com.masdika.audiobookcompose.ui.screens.home.components
+package com.masdika.audiobookcompose.ui.screen.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.masdika.audiobookcompose.ui.icons.SearchIcon
+import com.masdika.audiobookcompose.ui.icon.SearchIcon
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.ui.theme.GothamProBold
 

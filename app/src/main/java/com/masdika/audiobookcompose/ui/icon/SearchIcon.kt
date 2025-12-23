@@ -1,4 +1,4 @@
-package com.masdika.audiobookcompose.ui.icons
+package com.masdika.audiobookcompose.ui.icon
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor

@@ -1,4 +1,4 @@
-package com.masdika.audiobookcompose.ui.screens.home.components
+package com.masdika.audiobookcompose.ui.screen.home.component
 
 import StarIcon
 import android.content.res.Configuration.UI_MODE_NIGHT_NO

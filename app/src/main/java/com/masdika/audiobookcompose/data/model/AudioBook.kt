@@ -21,7 +21,7 @@ val audioBookList = listOf(
             Genre(genreList[2].name),
             Genre(genreList[3].name)
         ),
-        imageID = R.drawable.ic_launcher_background
+        imageID = R.drawable.city_of_girls_elizabeth_gilbert
     ),
     AudioBook(
         title = "The Diamond Chariot",
@@ -33,7 +33,7 @@ val audioBookList = listOf(
             Genre(genreList[2].name),
             Genre(genreList[5].name)
         ),
-        imageID = R.drawable.ic_launcher_background
+        imageID = R.drawable.the_diamond_chariot_boris_akunin
     ),
     AudioBook(
         title = "Sapiens: A Brief History of Humankind",
@@ -44,7 +44,7 @@ val audioBookList = listOf(
             Genre(genreList[2].name),
             Genre(genreList[4].name)
         ),
-        imageID = R.drawable.ic_launcher_background
+        imageID = R.drawable.sapiens_yuval_noah_harari
     ),
     AudioBook(
         title = "There Are Rivers in the Sky",
@@ -54,7 +54,7 @@ val audioBookList = listOf(
         genre = listOf(
             Genre(genreList[2].name)
         ),
-        imageID = R.drawable.ic_launcher_background
+        imageID = R.drawable.there_are_river_in_the_sky_elif_shafak
     ),
     AudioBook(
         title = "Orbital",
@@ -66,6 +66,6 @@ val audioBookList = listOf(
             Genre(genreList[4].name),
             Genre(genreList[5].name)
         ),
-        imageID = R.drawable.ic_launcher_background
+        imageID = R.drawable.orbital_samanta_harvey
     )
 )
