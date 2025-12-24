@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,6 +41,8 @@ import com.masdika.audiobookcompose.ui.screen.home.component.TopTitle
 import com.masdika.audiobookcompose.ui.screen.home.component.bottombar.BottomNavigation
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.viewmodel.home.HomeUIState
+import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
 fun HomeScreen(
@@ -83,6 +88,8 @@ fun HomeScreen(
             }
 
             is HomeUIState.Success -> {
+                val configuration = LocalConfiguration.current
+                val screenHeight = configuration.screenHeightDp.dp
                 var selectedIndex by remember { mutableIntStateOf(0) }
                 val audioBooks = uiState.audioBooks
                 val filteredAudioBooks by remember(selectedIndex, audioBooks) {
@@ -97,49 +104,73 @@ fun HomeScreen(
                         }
                     )
                 }
+                val listState = rememberLazyListState()
+                val coroutineScope = rememberCoroutineScope()
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top,
+                LazyColumn(
+                    state = listState,
                     modifier = Modifier
+                        .fillMaxSize()
                         .padding(innerPadding)
                         .padding(horizontal = 20.dp)
-                        .fillMaxSize()
                 ) {
-                    TopTitle(
-                        onSearchIconClicked = onSearchIconClicked,
-                        modifier = Modifier.fillMaxHeight(0.1f)
-                    )
-                    RecentlyPlayedCard(
-                        author = "Yuval Noah Harari",
-                        hourLeft = 8,
-                        minuteLeft = 24,
-                        backgroundImage = painterResource(R.drawable.sample),
-                        title = "Sapiens. A Brief History of Humankind",
-                    )
-                    Spacer(Modifier.fillMaxHeight(0.02f))
-                    GenreList(
-                        genres = genreList,
-                        selectedIndex = selectedIndex,
-                        onGenreSelected = { newIndex ->
-                            selectedIndex = newIndex
+                    item {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top,
+                        ) {
+                            TopTitle(
+                                onSearchIconClicked = onSearchIconClicked,
+                                modifier = Modifier.height(60.dp)
+                            )
+                            RecentlyPlayedCard(
+                                author = "Yuval Noah Harari",
+                                hourLeft = 8,
+                                minuteLeft = 24,
+                                backgroundImage = painterResource(R.drawable.sample),
+                                title = "Sapiens. A Brief History of Humankind",
+                            )
+                            Spacer(Modifier.height(10.dp))
                         }
-                    )
-                    Spacer(Modifier.fillMaxHeight(0.02f))
-                    LazyColumn(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
+                    }
+                    stickyHeader {
+                        Column(modifier = Modifier.background(backgroundColor)) {
+                            GenreList(
+                                genres = genreList,
+                                selectedIndex = selectedIndex,
+                                onGenreSelected = { newIndex ->
+                                    if (selectedIndex != newIndex) {
+                                        selectedIndex = newIndex
+                                        coroutineScope.launch {
+                                            listState.scrollToItem(1)
+                                        }
+                                    }
+                                }
+                            )
+                            Spacer(Modifier.height(10.dp))
+                        }
+                    }
+                    items(
+                        items = filteredAudioBooks,
+                        key = { it.title }
+                    ) { item ->
+                        AudioBookCard(
+                            author = item.author,
+                            title = item.title,
+                            synopsys = item.synopsys,
+                            rating = item.rating,
+                            image = item.imageID
+                        )
+                        Spacer(Modifier.height(20.dp))
+                    }
+                    if (filteredAudioBooks.size < 3) {
                         item {
-                            filteredAudioBooks.forEach { item ->
-                                AudioBookCard(
-                                    author = item.author,
-                                    title = item.title,
-                                    synopsys = item.synopsys,
-                                    rating = item.rating,
-                                    image = item.imageID
-                                )
-                                Spacer(Modifier.height(20.dp))
-                            }
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(screenHeight)
+                                    .background(backgroundColor)
+                            )
                         }
                     }
                 }
