@@ -27,7 +27,10 @@ fun AppNavigation(
 
             HomeScreen(
                 uiState = uiState,
-                onSearchIconClicked = { },
+                onSearchIconClicked = {},
+                onNavigateToHome = {},
+                onNavigateToMenu = {},
+                onNavigateToProfile = {},
             )
         }
     }
