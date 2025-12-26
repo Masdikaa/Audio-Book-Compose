@@ -28,11 +28,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.masdika.audiobookcompose.data.model.AudioBook
 import com.masdika.audiobookcompose.data.model.audioBookList
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
+import com.masdika.audiobookcompose.ui.theme.GothamProRegular
 
 @Composable
 fun SearchUI(
@@ -92,10 +97,23 @@ fun SearchUI(
         Spacer(Modifier.height(16.dp))
         if (searchResults.isEmpty() && searchQuery.isNotBlank()) {
             Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
+                contentAlignment = Alignment.TopStart,
+                modifier = Modifier.fillMaxSize().padding(top = 20.dp)
             ) {
-                Text("No results found for \"$searchQuery\"")
+                Text(
+                    text = "No results found for \"$searchQuery\"",
+                    fontFamily = GothamProRegular,
+                    fontSize = 16.sp,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = true
+                        ),
+                        lineHeightStyle = LineHeightStyle(
+                            trim = LineHeightStyle.Trim.Both,
+                            alignment = LineHeightStyle.Alignment.Center,
+                        )
+                    ),
+                )
             }
         } else {
             LazyColumn(
@@ -122,7 +140,7 @@ fun SearchUI(
 private fun SearchUIPreview() {
     AudioBookComposeTheme {
         SearchUI(
-            searchQuery = "Sapiens",
+            searchQuery = "Ya gantenk",
             onSearchQueryChanged = {},
             searchResults = audioBookList,
             onSearchItemClicked = {},

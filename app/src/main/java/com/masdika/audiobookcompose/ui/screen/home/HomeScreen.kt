@@ -22,8 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -31,8 +29,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.masdika.audiobookcompose.R
 import com.masdika.audiobookcompose.data.model.AudioBook
 import com.masdika.audiobookcompose.data.model.Genre
@@ -46,6 +48,7 @@ import com.masdika.audiobookcompose.ui.screen.home.component.TopTitle
 import com.masdika.audiobookcompose.ui.screen.home.component.bottombar.BottomNavigation
 import com.masdika.audiobookcompose.ui.screen.home.component.search.SearchUI
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
+import com.masdika.audiobookcompose.ui.theme.GothamProRegular
 import com.masdika.audiobookcompose.viewmodel.home.HomeUIState
 import kotlinx.coroutines.launch
 
@@ -59,6 +62,9 @@ fun HomeScreen(
     onSearchQueryChanged: (String) -> Unit,
     onSearchCloseClicked: () -> Unit,
     onSearchItemClicked: (String) -> Unit,
+    audioBooks: List<AudioBook>,
+    selectedGenreIndex: Int,
+    onGenreSelected: (Int) -> Unit,
     onAudioBookClicked: (String) -> Unit,
     onSearchIconClicked: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -108,20 +114,20 @@ fun HomeScreen(
             }
 
             is HomeUIState.Success -> {
-                var selectedIndex by remember { mutableIntStateOf(0) }
-                val audioBooks = uiState.audioBooks
-                val filteredAudioBooks by remember(selectedIndex, audioBooks) {
-                    mutableStateOf(
-                        if (selectedIndex == 0) {
-                            audioBooks
-                        } else {
-                            val selectedGenreName = genreList[selectedIndex - 1].name
-                            audioBooks.filter { audioBook ->
-                                audioBook.genre.any { it.name == selectedGenreName }
-                            }
-                        }
-                    )
-                }
+//                var selectedIndex by remember { mutableIntStateOf(0) }
+//                val audioBooks = uiState.audioBooks
+//                val filteredAudioBooks by remember(selectedIndex, audioBooks) {
+//                    mutableStateOf(
+//                        if (selectedIndex == 0) {
+//                            audioBooks
+//                        } else {
+//                            val selectedGenreName = genreList[selectedIndex - 1].name
+//                            audioBooks.filter { audioBook ->
+//                                audioBook.genre.any { it.name == selectedGenreName }
+//                            }
+//                        }
+//                    )
+//                }
 
                 if (isSearching) {
                     SearchUI(
@@ -134,10 +140,10 @@ fun HomeScreen(
                     )
                 } else {
                     HomeScreenContent(
-                        audioBooks = filteredAudioBooks,
+                        audioBooks = audioBooks,
                         genres = genreList,
-                        selectedIndex = selectedIndex,
-                        onGenreSelected = { newIndex -> selectedIndex = newIndex },
+                        selectedIndex = selectedGenreIndex,
+                        onGenreSelected = onGenreSelected,
                         onSearchIconClicked = onSearchIconClicked,
                         recentlyPlayed = recentlyPlayed,
                         onAudioBookClicked = onAudioBookClicked,
@@ -202,7 +208,20 @@ fun HomeScreenContent(
                         title = recentlyPlayed.title,
                     )
                 } else {
-                    Text("No recently played books yet. Click a book to start!")
+                    Text(
+                        text = "No recently played books yet. Click a book to start!",
+                        fontFamily = GothamProRegular,
+                        fontSize = 16.sp,
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = true
+                            ),
+                            lineHeightStyle = LineHeightStyle(
+                                trim = LineHeightStyle.Trim.Both,
+                                alignment = LineHeightStyle.Alignment.Center,
+                            )
+                        ),
+                    )
                 }
 
                 Spacer(Modifier.height(10.dp))
@@ -286,6 +305,9 @@ private fun HomeScreenSuccessPreview() {
             recentlyPlayed = recentlyPlayedSample,
             onAudioBookClicked = {},
             onSearchIconClicked = {},
+            audioBooks = audioBookList,
+            selectedGenreIndex = 0,
+            onGenreSelected = {},
             onNavigateToHome = {},
             onNavigateToMenu = {},
             onNavigateToProfile = {},
@@ -322,6 +344,9 @@ private fun HomeScreenLoadingPreview() {
             recentlyPlayed = null,
             onAudioBookClicked = {},
             onSearchIconClicked = {},
+            audioBooks = audioBookList,
+            selectedGenreIndex = 0,
+            onGenreSelected = {},
             onNavigateToHome = {},
             onNavigateToMenu = {},
             onNavigateToProfile = {},
@@ -357,6 +382,9 @@ private fun HomeScreenErrorPreview() {
             recentlyPlayed = null,
             onAudioBookClicked = {},
             onSearchIconClicked = {},
+            audioBooks = audioBookList,
+            selectedGenreIndex = 0,
+            onGenreSelected = {},
             onNavigateToHome = {},
             onNavigateToMenu = {},
             onNavigateToProfile = {},

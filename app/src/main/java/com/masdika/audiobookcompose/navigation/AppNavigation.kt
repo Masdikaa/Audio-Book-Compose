@@ -25,6 +25,8 @@ fun AppNavigation(
             val viewModel = viewModel<HomeViewModel>()
             val uiState by viewModel.uiState.collectAsState()
             val recentlyPlayed by viewModel.recentlyPlayedState.collectAsState()
+            val audioBooks by viewModel.audioBooks.collectAsState()
+            val selectedGenreIndex by viewModel.selectedGenreIndex.collectAsState()
             val isSearching by viewModel.isSearching.collectAsState()
             val searchQuery by viewModel.searchQuery.collectAsState()
             val searchResults by viewModel.searchResults.collectAsState()
@@ -36,6 +38,9 @@ fun AppNavigation(
                 isSearching = isSearching,
                 searchResults = searchResults,
                 onSearchCloseClicked = viewModel::onSearchCloseClicked,
+                audioBooks = audioBooks,
+                selectedGenreIndex = selectedGenreIndex,
+                onGenreSelected = viewModel::onGenreSelected,
                 onAudioBookClicked = viewModel::onAudioBookClicked,
                 onSearchIconClicked = viewModel::onSearchIconClicked,
                 onNavigateToHome = {},
