@@ -42,7 +42,6 @@ import com.masdika.audiobookcompose.ui.screen.home.component.bottombar.BottomNav
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.viewmodel.home.HomeUIState
 import kotlinx.coroutines.launch
-import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
 fun HomeScreen(
@@ -58,18 +57,20 @@ fun HomeScreen(
 
     Scaffold(
         bottomBar = {
-            BottomNavigation(
-                selectedIndex = selectedItemIndex,
-                onSelect = { index ->
-                    selectedItemIndex = index
-                    when (index) {
-                        0 -> onNavigateToHome()
-                        1 -> onNavigateToMenu()
-                        2 -> onNavigateToProfile()
-                    }
-                },
-                backgroundColor = backgroundColor
-            )
+            if (uiState is HomeUIState.Success) {
+                BottomNavigation(
+                    selectedIndex = selectedItemIndex,
+                    onSelect = { index ->
+                        selectedItemIndex = index
+                        when (index) {
+                            0 -> onNavigateToHome()
+                            1 -> onNavigateToMenu()
+                            2 -> onNavigateToProfile()
+                        }
+                    },
+                    backgroundColor = backgroundColor
+                )
+            }
         },
         modifier = modifier
             .fillMaxSize()
@@ -88,8 +89,6 @@ fun HomeScreen(
             }
 
             is HomeUIState.Success -> {
-                val configuration = LocalConfiguration.current
-                val screenHeight = configuration.screenHeightDp.dp
                 var selectedIndex by remember { mutableIntStateOf(0) }
                 val audioBooks = uiState.audioBooks
                 val filteredAudioBooks by remember(selectedIndex, audioBooks) {
@@ -133,6 +132,7 @@ fun HomeScreen(
                             Spacer(Modifier.height(10.dp))
                         }
                     }
+
                     stickyHeader {
                         Column(modifier = Modifier.background(backgroundColor)) {
                             GenreList(
@@ -142,7 +142,9 @@ fun HomeScreen(
                                     if (selectedIndex != newIndex) {
                                         selectedIndex = newIndex
                                         coroutineScope.launch {
-                                            listState.scrollToItem(1)
+                                            if (listState.firstVisibleItemIndex >= 1) {
+                                                listState.scrollToItem(1)
+                                            }
                                         }
                                     }
                                 }
@@ -150,6 +152,7 @@ fun HomeScreen(
                             Spacer(Modifier.height(10.dp))
                         }
                     }
+
                     items(
                         items = filteredAudioBooks,
                         key = { it.title }
@@ -163,12 +166,13 @@ fun HomeScreen(
                         )
                         Spacer(Modifier.height(20.dp))
                     }
+
                     if (filteredAudioBooks.size < 3) {
                         item {
                             Spacer(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(screenHeight)
+                                    .fillParentMaxHeight(1f)
                                     .background(backgroundColor)
                             )
                         }
@@ -191,24 +195,78 @@ fun HomeScreen(
 }
 
 @Preview(
-    name = "Home Screen Light Mode",
+    name = "Home Screen Success Light Mode",
     showBackground = true,
     widthDp = 425,
     heightDp = 944,
     uiMode = UI_MODE_NIGHT_NO
 )
 @Preview(
-    name = "Home Screen Dark Mode",
+    name = "Home Screen Success Dark Mode",
     showBackground = true,
     widthDp = 425,
     heightDp = 944,
     uiMode = UI_MODE_NIGHT_YES
 )
 @Composable
-private fun HomeScreenPreview() {
+private fun HomeScreenSuccessPreview() {
     AudioBookComposeTheme {
         HomeScreen(
             uiState = HomeUIState.Success(audioBookList),
+            onSearchIconClicked = {},
+            onNavigateToHome = {},
+            onNavigateToMenu = {},
+            onNavigateToProfile = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Home Screen Loading Light Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Home Screen Loading Dark Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+private fun HomeScreenLoadingPreview() {
+    AudioBookComposeTheme {
+        HomeScreen(
+            uiState = HomeUIState.Loading,
+            onSearchIconClicked = {},
+            onNavigateToHome = {},
+            onNavigateToMenu = {},
+            onNavigateToProfile = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Home Screen Error Light Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Home Screen Error Dark Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+private fun HomeScreenErrorPreview() {
+    AudioBookComposeTheme {
+        HomeScreen(
+            uiState = HomeUIState.Error("Unable to load data"),
             onSearchIconClicked = {},
             onNavigateToHome = {},
             onNavigateToMenu = {},
