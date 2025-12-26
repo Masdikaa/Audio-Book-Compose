@@ -2,6 +2,7 @@ package com.masdika.audiobookcompose.ui.screen.home
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import com.masdika.audiobookcompose.ui.screen.home.component.GenreList
 import com.masdika.audiobookcompose.ui.screen.home.component.RecentlyPlayedCard
 import com.masdika.audiobookcompose.ui.screen.home.component.TopTitle
 import com.masdika.audiobookcompose.ui.screen.home.component.bottombar.BottomNavigation
+import com.masdika.audiobookcompose.ui.screen.home.component.search.SearchUI
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.viewmodel.home.HomeUIState
 import kotlinx.coroutines.launch
@@ -51,6 +53,12 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     uiState: HomeUIState,
     recentlyPlayed: RecentlyPlayedUi?,
+    isSearching: Boolean,
+    searchQuery: String,
+    searchResults: List<AudioBook>,
+    onSearchQueryChanged: (String) -> Unit,
+    onSearchCloseClicked: () -> Unit,
+    onSearchItemClicked: (String) -> Unit,
     onAudioBookClicked: (String) -> Unit,
     onSearchIconClicked: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -62,9 +70,13 @@ fun HomeScreen(
     val backgroundColor = MaterialTheme.colorScheme.background
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
+    BackHandler(enabled = isSearching) {
+        onSearchCloseClicked()
+    }
+
     Scaffold(
         bottomBar = {
-            if (uiState is HomeUIState.Success) {
+            if (uiState is HomeUIState.Success && !isSearching) {
                 BottomNavigation(
                     selectedIndex = selectedItemIndex,
                     onSelect = { index ->
@@ -111,17 +123,28 @@ fun HomeScreen(
                     )
                 }
 
-                HomeScreenContent(
-                    audioBooks = filteredAudioBooks,
-                    genres = genreList,
-                    selectedIndex = selectedIndex,
-                    onGenreSelected = { newIndex -> selectedIndex = newIndex },
-                    onSearchIconClicked = onSearchIconClicked,
-                    recentlyPlayed = recentlyPlayed,
-                    onAudioBookClicked = onAudioBookClicked,
-                    modifier = Modifier.padding(innerPadding),
-                    backgroundColor = backgroundColor
-                )
+                if (isSearching) {
+                    SearchUI(
+                        searchQuery = searchQuery,
+                        onSearchQueryChanged = onSearchQueryChanged,
+                        searchResults = searchResults,
+                        onSearchItemClicked = onSearchItemClicked,
+                        onCloseClicked = onSearchCloseClicked,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                } else {
+                    HomeScreenContent(
+                        audioBooks = filteredAudioBooks,
+                        genres = genreList,
+                        selectedIndex = selectedIndex,
+                        onGenreSelected = { newIndex -> selectedIndex = newIndex },
+                        onSearchIconClicked = onSearchIconClicked,
+                        recentlyPlayed = recentlyPlayed,
+                        onAudioBookClicked = onAudioBookClicked,
+                        backgroundColor = backgroundColor,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
 
             is HomeUIState.Error -> {
@@ -266,6 +289,12 @@ private fun HomeScreenSuccessPreview() {
             onNavigateToHome = {},
             onNavigateToMenu = {},
             onNavigateToProfile = {},
+            onSearchCloseClicked = {},
+            isSearching = false,
+            searchQuery = "",
+            searchResults = emptyList(),
+            onSearchQueryChanged = {},
+            onSearchItemClicked = {},
         )
 
     }
@@ -296,6 +325,12 @@ private fun HomeScreenLoadingPreview() {
             onNavigateToHome = {},
             onNavigateToMenu = {},
             onNavigateToProfile = {},
+            onSearchCloseClicked = {},
+            isSearching = false,
+            searchQuery = "",
+            searchResults = emptyList(),
+            onSearchQueryChanged = {},
+            onSearchItemClicked = {},
         )
     }
 }
@@ -325,6 +360,12 @@ private fun HomeScreenErrorPreview() {
             onNavigateToHome = {},
             onNavigateToMenu = {},
             onNavigateToProfile = {},
+            onSearchCloseClicked = {},
+            isSearching = false,
+            searchQuery = "",
+            searchResults = emptyList(),
+            onSearchQueryChanged = {},
+            onSearchItemClicked = {},
         )
     }
 }

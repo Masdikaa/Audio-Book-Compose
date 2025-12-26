@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.masdika.audiobookcompose.ui.screen.home.HomeScreen
-import com.masdika.audiobookcompose.viewmodel.home.HomeVIewModel
+import com.masdika.audiobookcompose.viewmodel.home.HomeViewModel
 
 @Composable
 fun AppNavigation(
@@ -22,18 +22,27 @@ fun AppNavigation(
         modifier = modifier
     ) {
         composable<Screen.Home> {
-            val viewModel = viewModel<HomeVIewModel>()
+            val viewModel = viewModel<HomeViewModel>()
             val uiState by viewModel.uiState.collectAsState()
             val recentlyPlayed by viewModel.recentlyPlayedState.collectAsState()
+            val isSearching by viewModel.isSearching.collectAsState()
+            val searchQuery by viewModel.searchQuery.collectAsState()
+            val searchResults by viewModel.searchResults.collectAsState()
 
             HomeScreen(
                 uiState = uiState,
                 recentlyPlayed = recentlyPlayed,
-                onAudioBookClicked = { bookId -> viewModel.onAudioBookClicked(bookId) },
-                onSearchIconClicked = {},
+                searchQuery = searchQuery,
+                isSearching = isSearching,
+                searchResults = searchResults,
+                onSearchCloseClicked = viewModel::onSearchCloseClicked,
+                onAudioBookClicked = viewModel::onAudioBookClicked,
+                onSearchIconClicked = viewModel::onSearchIconClicked,
                 onNavigateToHome = {},
                 onNavigateToMenu = {},
                 onNavigateToProfile = {},
+                onSearchQueryChanged = viewModel::onSearchQueryChanged,
+                onSearchItemClicked = viewModel::onSearchItemClicked,
             )
         }
     }
