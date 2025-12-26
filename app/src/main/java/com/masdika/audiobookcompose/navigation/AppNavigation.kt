@@ -31,6 +31,7 @@ fun AppNavigation(
                 onNavigateToHome = {},
                 onNavigateToMenu = {},
                 onNavigateToProfile = {},
+                homeViewModel = viewModel
             )
         }
     }

@@ -54,7 +54,7 @@ fun RecentlyPlayedCard(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(260.dp)
+            .height(240.dp)
             .clip(RoundedCornerShape(percent = 12))
             .clickable{
 
@@ -92,7 +92,7 @@ fun RecentlyPlayedCard(
             ) {
                 Text(
                     text = author,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     fontFamily = GothamProRegular,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,

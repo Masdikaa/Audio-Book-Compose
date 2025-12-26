@@ -45,11 +45,13 @@ import com.masdika.audiobookcompose.ui.theme.GothamProRegular
 
 @Composable
 fun AudioBookCard(
+    id: String,
     author: String,
     title: String,
     synopsys: String,
     rating: Double,
     modifier: Modifier = Modifier,
+    onAudioBookClicked: (String) -> Unit,
     image: Int = R.drawable.ic_launcher_background
 ) {
     Row(
@@ -65,7 +67,7 @@ fun AudioBookCard(
             )
             .clip(RoundedCornerShape(10))
             .clickable {
-                // TODO() Implement Clickable
+                onAudioBookClicked(id)
             }
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp)
@@ -200,10 +202,12 @@ fun AudioBookCard(
 private fun AudioBookCardPreview() {
     AudioBookComposeTheme {
         AudioBookCard(
+            id = "1",
             author = "Elizabeth Gilbert",
             title = "Audio Book Title",
             synopsys = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porttitor augue pretium enim consequat pulvinar. Proin pretium turpis condimentum tortor fringilla tempor. Quisque porttitor nibh sit amet ipsum accumsan molestie. Phasellus nibh leo, tristique eu cursus nec, commodo sit amet dolor. Integer metus lectus, gravida id dapibus convallis, vestibulum vel sapien. Vivamus luctus neque enim, ac varius massa pharetra eget. Curabitur suscipit nunc risus, sed aliquam neque tincidunt quis. Curabitur posuere in lacus at congue. Suspendisse dignissim imperdiet lectus nec tempor. Vivamus placerat metus enim, at vehicula sem viverra sed. In vitae urna vitae mauris dapibus dictum. Aliquam eget metus commodo, dapibus ex id, dapibus odio. Mauris in rutrum nisl. Nunc ac dolor sodales, ultrices felis non, tempor elit. Suspendisse pretium in quam quis varius.",
-            rating = 4.5
+            rating = 4.5,
+            onAudioBookClicked = {},
         )
     }
 }

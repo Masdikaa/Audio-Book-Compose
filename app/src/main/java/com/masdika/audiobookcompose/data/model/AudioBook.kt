@@ -3,16 +3,19 @@ package com.masdika.audiobookcompose.data.model
 import com.masdika.audiobookcompose.R
 
 data class AudioBook(
+    val id: String,
     val title: String,
     val author: String,
     val synopsys: String,
     val rating: Double,
     val genre: List<Genre>,
-    val imageID: Int
+    val imageID: Int,
+    val totalDuration: Long
 )
 
 val audioBookList = listOf(
     AudioBook(
+        id = "1",
         title = "City of Girls",
         author = "Elizabeth Gilbert",
         synopsys = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porttitor augue pretium enim consequat pulvinar. Proin pretium turpis condimentum tortor fringilla tempor. Quisque porttitor nibh sit amet ipsum accumsan molestie. Phasellus nibh leo, tristique eu cursus nec, commodo sit amet dolor. Integer metus lectus, gravida id dapibus convallis, vestibulum vel sapien. Vivamus luctus neque enim, ac varius massa pharetra eget. Curabitur suscipit nunc risus, sed aliquam neque tincidunt quis. Curabitur posuere in lacus at congue. Suspendisse dignissim imperdiet lectus nec tempor. Vivamus placerat metus enim, at vehicula sem viverra sed. In vitae urna vitae mauris dapibus dictum. Aliquam eget metus commodo, dapibus ex id, dapibus odio. Mauris in rutrum nisl. Nunc ac dolor sodales, ultrices felis non, tempor elit. Suspendisse pretium in quam quis varius.",
@@ -21,9 +24,11 @@ val audioBookList = listOf(
             Genre(genreList[2].name),
             Genre(genreList[3].name)
         ),
-        imageID = R.drawable.city_of_girls_elizabeth_gilbert
+        imageID = R.drawable.city_of_girls_elizabeth_gilbert,
+        totalDuration = 28800L
     ),
     AudioBook(
+        id = "2",
         title = "The Diamond Chariot",
         author = "Boris Akunin",
         synopsys = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porttitor augue pretium enim consequat pulvinar. Proin pretium turpis condimentum tortor fringilla tempor. Quisque porttitor nibh sit amet ipsum accumsan molestie. Phasellus nibh leo, tristique eu cursus nec, commodo sit amet dolor. Integer metus lectus, gravida id dapibus convallis, vestibulum vel sapien. Vivamus luctus neque enim, ac varius massa pharetra eget. Curabitur suscipit nunc risus, sed aliquam neque tincidunt quis. Curabitur posuere in lacus at congue. Suspendisse dignissim imperdiet lectus nec tempor. Vivamus placerat metus enim, at vehicula sem viverra sed. In vitae urna vitae mauris dapibus dictum. Aliquam eget metus commodo, dapibus ex id, dapibus odio. Mauris in rutrum nisl. Nunc ac dolor sodales, ultrices felis non, tempor elit. Suspendisse pretium in quam quis varius.",
@@ -33,9 +38,11 @@ val audioBookList = listOf(
             Genre(genreList[2].name),
             Genre(genreList[5].name)
         ),
-        imageID = R.drawable.the_diamond_chariot_boris_akunin
+        imageID = R.drawable.the_diamond_chariot_boris_akunin,
+        totalDuration = 14400L
     ),
     AudioBook(
+        id = "3",
         title = "Sapiens: A Brief History of Humankind",
         author = "Yuval Noah Harari",
         synopsys = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porttitor augue pretium enim consequat pulvinar. Proin pretium turpis condimentum tortor fringilla tempor. Quisque porttitor nibh sit amet ipsum accumsan molestie. Phasellus nibh leo, tristique eu cursus nec, commodo sit amet dolor. Integer metus lectus, gravida id dapibus convallis, vestibulum vel sapien. Vivamus luctus neque enim, ac varius massa pharetra eget. Curabitur suscipit nunc risus, sed aliquam neque tincidunt quis. Curabitur posuere in lacus at congue. Suspendisse dignissim imperdiet lectus nec tempor. Vivamus placerat metus enim, at vehicula sem viverra sed. In vitae urna vitae mauris dapibus dictum. Aliquam eget metus commodo, dapibus ex id, dapibus odio. Mauris in rutrum nisl. Nunc ac dolor sodales, ultrices felis non, tempor elit. Suspendisse pretium in quam quis varius.",
@@ -44,9 +51,11 @@ val audioBookList = listOf(
             Genre(genreList[2].name),
             Genre(genreList[4].name)
         ),
-        imageID = R.drawable.sapiens_yuval_noah_harari
+        imageID = R.drawable.sapiens_yuval_noah_harari,
+        totalDuration = 18000L
     ),
     AudioBook(
+        id = "4",
         title = "There Are Rivers in the Sky",
         author = "Elif Shafak",
         synopsys = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porttitor augue pretium enim consequat pulvinar. Proin pretium turpis condimentum tortor fringilla tempor. Quisque porttitor nibh sit amet ipsum accumsan molestie. Phasellus nibh leo, tristique eu cursus nec, commodo sit amet dolor. Integer metus lectus, gravida id dapibus convallis, vestibulum vel sapien. Vivamus luctus neque enim, ac varius massa pharetra eget. Curabitur suscipit nunc risus, sed aliquam neque tincidunt quis. Curabitur posuere in lacus at congue. Suspendisse dignissim imperdiet lectus nec tempor. Vivamus placerat metus enim, at vehicula sem viverra sed. In vitae urna vitae mauris dapibus dictum. Aliquam eget metus commodo, dapibus ex id, dapibus odio. Mauris in rutrum nisl. Nunc ac dolor sodales, ultrices felis non, tempor elit. Suspendisse pretium in quam quis varius.",
@@ -54,9 +63,11 @@ val audioBookList = listOf(
         genre = listOf(
             Genre(genreList[2].name)
         ),
-        imageID = R.drawable.there_are_river_in_the_sky_elif_shafak
+        imageID = R.drawable.there_are_river_in_the_sky_elif_shafak,
+        totalDuration = 4320L
     ),
     AudioBook(
+        id = "5",
         title = "Orbital",
         author = "Samantha Harvey",
         synopsys = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus porttitor augue pretium enim consequat pulvinar. Proin pretium turpis condimentum tortor fringilla tempor. Quisque porttitor nibh sit amet ipsum accumsan molestie. Phasellus nibh leo, tristique eu cursus nec, commodo sit amet dolor. Integer metus lectus, gravida id dapibus convallis, vestibulum vel sapien. Vivamus luctus neque enim, ac varius massa pharetra eget. Curabitur suscipit nunc risus, sed aliquam neque tincidunt quis. Curabitur posuere in lacus at congue. Suspendisse dignissim imperdiet lectus nec tempor. Vivamus placerat metus enim, at vehicula sem viverra sed. In vitae urna vitae mauris dapibus dictum. Aliquam eget metus commodo, dapibus ex id, dapibus odio. Mauris in rutrum nisl. Nunc ac dolor sodales, ultrices felis non, tempor elit. Suspendisse pretium in quam quis varius.",
@@ -66,6 +77,7 @@ val audioBookList = listOf(
             Genre(genreList[4].name),
             Genre(genreList[5].name)
         ),
-        imageID = R.drawable.orbital_samanta_harvey
+        imageID = R.drawable.orbital_samanta_harvey,
+        totalDuration = 20880L
     )
 )

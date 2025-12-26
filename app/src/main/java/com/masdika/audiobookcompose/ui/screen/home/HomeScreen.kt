@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +29,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.masdika.audiobookcompose.R
+import com.masdika.audiobookcompose.data.model.AudioBook
+import com.masdika.audiobookcompose.data.model.Genre
+import com.masdika.audiobookcompose.data.model.RecentlyPlayedUi
 import com.masdika.audiobookcompose.data.model.audioBookList
 import com.masdika.audiobookcompose.data.model.genreList
 import com.masdika.audiobookcompose.ui.screen.home.component.AudioBookCard
@@ -41,10 +45,12 @@ import com.masdika.audiobookcompose.ui.screen.home.component.TopTitle
 import com.masdika.audiobookcompose.ui.screen.home.component.bottombar.BottomNavigation
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.viewmodel.home.HomeUIState
+import com.masdika.audiobookcompose.viewmodel.home.HomeVIewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
+    homeViewModel: HomeVIewModel,
     uiState: HomeUIState,
     onSearchIconClicked: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -52,6 +58,9 @@ fun HomeScreen(
     onNavigateToProfile: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val uiState by homeViewModel.uiState.collectAsState()
+    val recentlyPlayed by homeViewModel.recentlyPlayedState.collectAsState()
+
     val backgroundColor = MaterialTheme.colorScheme.background
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -76,7 +85,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(backgroundColor)
     ) { innerPadding ->
-        when (uiState) {
+        when (val currentState = uiState) {
             is HomeUIState.Loading -> {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -90,7 +99,7 @@ fun HomeScreen(
 
             is HomeUIState.Success -> {
                 var selectedIndex by remember { mutableIntStateOf(0) }
-                val audioBooks = uiState.audioBooks
+                val audioBooks = currentState.audioBooks
                 val filteredAudioBooks by remember(selectedIndex, audioBooks) {
                     mutableStateOf(
                         if (selectedIndex == 0) {
@@ -103,81 +112,18 @@ fun HomeScreen(
                         }
                     )
                 }
-                val listState = rememberLazyListState()
-                val coroutineScope = rememberCoroutineScope()
 
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = 20.dp)
-                ) {
-                    item {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Top,
-                        ) {
-                            TopTitle(
-                                onSearchIconClicked = onSearchIconClicked,
-                                modifier = Modifier.height(60.dp)
-                            )
-                            RecentlyPlayedCard(
-                                author = "Yuval Noah Harari",
-                                hourLeft = 8,
-                                minuteLeft = 24,
-                                backgroundImage = painterResource(R.drawable.sample),
-                                title = "Sapiens. A Brief History of Humankind",
-                            )
-                            Spacer(Modifier.height(10.dp))
-                        }
-                    }
-
-                    stickyHeader {
-                        Column(modifier = Modifier.background(backgroundColor)) {
-                            GenreList(
-                                genres = genreList,
-                                selectedIndex = selectedIndex,
-                                onGenreSelected = { newIndex ->
-                                    if (selectedIndex != newIndex) {
-                                        selectedIndex = newIndex
-                                        coroutineScope.launch {
-                                            if (listState.firstVisibleItemIndex >= 1) {
-                                                listState.scrollToItem(1)
-                                            }
-                                        }
-                                    }
-                                }
-                            )
-                            Spacer(Modifier.height(10.dp))
-                        }
-                    }
-
-                    items(
-                        items = filteredAudioBooks,
-                        key = { it.title }
-                    ) { item ->
-                        AudioBookCard(
-                            author = item.author,
-                            title = item.title,
-                            synopsys = item.synopsys,
-                            rating = item.rating,
-                            image = item.imageID
-                        )
-                        Spacer(Modifier.height(20.dp))
-                    }
-
-                    if (filteredAudioBooks.size < 3) {
-                        item {
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillParentMaxHeight(1f)
-                                    .background(backgroundColor)
-                            )
-                        }
-                    }
-                }
+                HomeScreenContent(
+                    audioBooks = filteredAudioBooks,
+                    genres = genreList,
+                    selectedIndex = selectedIndex,
+                    onGenreSelected = { newIndex -> selectedIndex = newIndex },
+                    onSearchIconClicked = onSearchIconClicked,
+                    recentlyPlayed = recentlyPlayed,
+                    onAudioBookClicked = { bookId -> homeViewModel.onAudioBookClicked(bookId) },
+                    modifier = Modifier.padding(innerPadding),
+                    backgroundColor = backgroundColor
+                )
             }
 
             is HomeUIState.Error -> {
@@ -194,84 +140,181 @@ fun HomeScreen(
     }
 }
 
-@Preview(
-    name = "Home Screen Success Light Mode",
-    showBackground = true,
-    widthDp = 425,
-    heightDp = 944,
-    uiMode = UI_MODE_NIGHT_NO
-)
-@Preview(
-    name = "Home Screen Success Dark Mode",
-    showBackground = true,
-    widthDp = 425,
-    heightDp = 944,
-    uiMode = UI_MODE_NIGHT_YES
-)
 @Composable
-private fun HomeScreenSuccessPreview() {
-    AudioBookComposeTheme {
-        HomeScreen(
-            uiState = HomeUIState.Success(audioBookList),
-            onSearchIconClicked = {},
-            onNavigateToHome = {},
-            onNavigateToMenu = {},
-            onNavigateToProfile = {},
-        )
+fun HomeScreenContent(
+    audioBooks: List<AudioBook>,
+    genres: List<Genre>,
+    selectedIndex: Int,
+    onGenreSelected: (Int) -> Unit,
+    onSearchIconClicked: () -> Unit,
+    recentlyPlayed: RecentlyPlayedUi?,
+    onAudioBookClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colorScheme.background
+) {
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    LazyColumn(
+        state = listState,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
+    ) {
+        item {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
+            ) {
+                TopTitle(
+                    onSearchIconClicked = onSearchIconClicked,
+                    modifier = Modifier.height(60.dp)
+                )
+                if (recentlyPlayed != null) {
+                    val hours = recentlyPlayed.remainingDuration / 3600
+                    val minutes = (recentlyPlayed.remainingDuration % 3600) / 60
+                    RecentlyPlayedCard(
+                        author = recentlyPlayed.author,
+                        hourLeft = hours.toInt(),
+                        minuteLeft = minutes.toInt(),
+                        backgroundImage = painterResource(id = recentlyPlayed.imageId),
+                        title = recentlyPlayed.title,
+                    )
+                } else {
+                    Text("No recently played books yet. Click a book to start!")
+                }
+
+                Spacer(Modifier.height(10.dp))
+            }
+        }
+
+        stickyHeader {
+            Column(modifier = Modifier.background(backgroundColor)) {
+                GenreList(
+                    genres = genres,
+                    selectedIndex = selectedIndex,
+                    onGenreSelected = { newIndex ->
+                        if (selectedIndex != newIndex) {
+                            onGenreSelected(newIndex)
+                            coroutineScope.launch {
+                                if (listState.firstVisibleItemIndex >= 1) {
+                                    listState.scrollToItem(1)
+                                }
+                            }
+                        }
+                    }
+                )
+                Spacer(Modifier.height(10.dp))
+            }
+        }
+
+        items(
+            items = audioBooks,
+            key = { it.id }
+        ) { item ->
+            AudioBookCard(
+                id = item.id,
+                author = item.author,
+                title = item.title,
+                synopsys = item.synopsys,
+                rating = item.rating,
+                image = item.imageID,
+                onAudioBookClicked = { onAudioBookClicked(item.id) }
+            )
+            Spacer(Modifier.height(20.dp))
+        }
+
+        if (audioBooks.size < 3) {
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillParentMaxHeight(1f)
+                        .background(backgroundColor)
+                )
+            }
+        }
     }
 }
 
-@Preview(
-    name = "Home Screen Loading Light Mode",
-    showBackground = true,
-    widthDp = 425,
-    heightDp = 944,
-    uiMode = UI_MODE_NIGHT_NO
-)
-@Preview(
-    name = "Home Screen Loading Dark Mode",
-    showBackground = true,
-    widthDp = 425,
-    heightDp = 944,
-    uiMode = UI_MODE_NIGHT_YES
-)
-@Composable
-private fun HomeScreenLoadingPreview() {
-    AudioBookComposeTheme {
-        HomeScreen(
-            uiState = HomeUIState.Loading,
-            onSearchIconClicked = {},
-            onNavigateToHome = {},
-            onNavigateToMenu = {},
-            onNavigateToProfile = {},
-        )
-    }
-}
-
-@Preview(
-    name = "Home Screen Error Light Mode",
-    showBackground = true,
-    widthDp = 425,
-    heightDp = 944,
-    uiMode = UI_MODE_NIGHT_NO
-)
-@Preview(
-    name = "Home Screen Error Dark Mode",
-    showBackground = true,
-    widthDp = 425,
-    heightDp = 944,
-    uiMode = UI_MODE_NIGHT_YES
-)
-@Composable
-private fun HomeScreenErrorPreview() {
-    AudioBookComposeTheme {
-        HomeScreen(
-            uiState = HomeUIState.Error("Unable to load data"),
-            onSearchIconClicked = {},
-            onNavigateToHome = {},
-            onNavigateToMenu = {},
-            onNavigateToProfile = {},
-        )
-    }
-}
-
+//@Preview(
+//    name = "Home Screen Success Light Mode",
+//    showBackground = true,
+//    widthDp = 425,
+//    heightDp = 944,
+//    uiMode = UI_MODE_NIGHT_NO
+//)
+//@Preview(
+//    name = "Home Screen Success Dark Mode",
+//    showBackground = true,
+//    widthDp = 425,
+//    heightDp = 944,
+//    uiMode = UI_MODE_NIGHT_YES
+//)
+//@Composable
+//private fun HomeScreenSuccessPreview() {
+//    AudioBookComposeTheme {
+//        HomeScreenContent(
+//            uiState = HomeUIState.Success(audioBookList),
+//            onSearchIconClicked = {},
+//            onNavigateToHome = {},
+//            onNavigateToMenu = {},
+//            onNavigateToProfile = {},
+//        )
+//    }
+//}
+//
+//@Preview(
+//    name = "Home Screen Loading Light Mode",
+//    showBackground = true,
+//    widthDp = 425,
+//    heightDp = 944,
+//    uiMode = UI_MODE_NIGHT_NO
+//)
+//@Preview(
+//    name = "Home Screen Loading Dark Mode",
+//    showBackground = true,
+//    widthDp = 425,
+//    heightDp = 944,
+//    uiMode = UI_MODE_NIGHT_YES
+//)
+//@Composable
+//private fun HomeScreenLoadingPreview() {
+//    AudioBookComposeTheme {
+//        HomeScreen(
+//            uiState = HomeUIState.Loading,
+//            onSearchIconClicked = {},
+//            onNavigateToHome = {},
+//            onNavigateToMenu = {},
+//            onNavigateToProfile = {},
+//        )
+//    }
+//}
+//
+//@Preview(
+//    name = "Home Screen Error Light Mode",
+//    showBackground = true,
+//    widthDp = 425,
+//    heightDp = 944,
+//    uiMode = UI_MODE_NIGHT_NO
+//)
+//@Preview(
+//    name = "Home Screen Error Dark Mode",
+//    showBackground = true,
+//    widthDp = 425,
+//    heightDp = 944,
+//    uiMode = UI_MODE_NIGHT_YES
+//)
+//@Composable
+//private fun HomeScreenErrorPreview() {
+//    AudioBookComposeTheme {
+//        HomeScreen(
+//            uiState = HomeUIState.Error("Unable to load data"),
+//            onSearchIconClicked = {},
+//            onNavigateToHome = {},
+//            onNavigateToMenu = {},
+//            onNavigateToProfile = {},
+//        )
+//    }
+//}
+//
