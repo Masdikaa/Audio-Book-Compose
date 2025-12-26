@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.masdika.audiobookcompose.R
 import com.masdika.audiobookcompose.data.model.AudioBook
 import com.masdika.audiobookcompose.data.model.Genre
 import com.masdika.audiobookcompose.data.model.RecentlyPlayedUi
@@ -45,22 +45,20 @@ import com.masdika.audiobookcompose.ui.screen.home.component.TopTitle
 import com.masdika.audiobookcompose.ui.screen.home.component.bottombar.BottomNavigation
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.viewmodel.home.HomeUIState
-import com.masdika.audiobookcompose.viewmodel.home.HomeVIewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeVIewModel,
     uiState: HomeUIState,
+    recentlyPlayed: RecentlyPlayedUi?,
+    onAudioBookClicked: (String) -> Unit,
     onSearchIconClicked: () -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToMenu: () -> Unit,
     onNavigateToProfile: () -> Unit,
     modifier: Modifier = Modifier
-) {
-    val uiState by homeViewModel.uiState.collectAsState()
-    val recentlyPlayed by homeViewModel.recentlyPlayedState.collectAsState()
 
+) {
     val backgroundColor = MaterialTheme.colorScheme.background
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -85,7 +83,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(backgroundColor)
     ) { innerPadding ->
-        when (val currentState = uiState) {
+        when (uiState) {
             is HomeUIState.Loading -> {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -99,7 +97,7 @@ fun HomeScreen(
 
             is HomeUIState.Success -> {
                 var selectedIndex by remember { mutableIntStateOf(0) }
-                val audioBooks = currentState.audioBooks
+                val audioBooks = uiState.audioBooks
                 val filteredAudioBooks by remember(selectedIndex, audioBooks) {
                     mutableStateOf(
                         if (selectedIndex == 0) {
@@ -120,7 +118,7 @@ fun HomeScreen(
                     onGenreSelected = { newIndex -> selectedIndex = newIndex },
                     onSearchIconClicked = onSearchIconClicked,
                     recentlyPlayed = recentlyPlayed,
-                    onAudioBookClicked = { bookId -> homeViewModel.onAudioBookClicked(bookId) },
+                    onAudioBookClicked = onAudioBookClicked,
                     modifier = Modifier.padding(innerPadding),
                     backgroundColor = backgroundColor
                 )
@@ -237,84 +235,97 @@ fun HomeScreenContent(
     }
 }
 
-//@Preview(
-//    name = "Home Screen Success Light Mode",
-//    showBackground = true,
-//    widthDp = 425,
-//    heightDp = 944,
-//    uiMode = UI_MODE_NIGHT_NO
-//)
-//@Preview(
-//    name = "Home Screen Success Dark Mode",
-//    showBackground = true,
-//    widthDp = 425,
-//    heightDp = 944,
-//    uiMode = UI_MODE_NIGHT_YES
-//)
-//@Composable
-//private fun HomeScreenSuccessPreview() {
-//    AudioBookComposeTheme {
-//        HomeScreenContent(
-//            uiState = HomeUIState.Success(audioBookList),
-//            onSearchIconClicked = {},
-//            onNavigateToHome = {},
-//            onNavigateToMenu = {},
-//            onNavigateToProfile = {},
-//        )
-//    }
-//}
-//
-//@Preview(
-//    name = "Home Screen Loading Light Mode",
-//    showBackground = true,
-//    widthDp = 425,
-//    heightDp = 944,
-//    uiMode = UI_MODE_NIGHT_NO
-//)
-//@Preview(
-//    name = "Home Screen Loading Dark Mode",
-//    showBackground = true,
-//    widthDp = 425,
-//    heightDp = 944,
-//    uiMode = UI_MODE_NIGHT_YES
-//)
-//@Composable
-//private fun HomeScreenLoadingPreview() {
-//    AudioBookComposeTheme {
-//        HomeScreen(
-//            uiState = HomeUIState.Loading,
-//            onSearchIconClicked = {},
-//            onNavigateToHome = {},
-//            onNavigateToMenu = {},
-//            onNavigateToProfile = {},
-//        )
-//    }
-//}
-//
-//@Preview(
-//    name = "Home Screen Error Light Mode",
-//    showBackground = true,
-//    widthDp = 425,
-//    heightDp = 944,
-//    uiMode = UI_MODE_NIGHT_NO
-//)
-//@Preview(
-//    name = "Home Screen Error Dark Mode",
-//    showBackground = true,
-//    widthDp = 425,
-//    heightDp = 944,
-//    uiMode = UI_MODE_NIGHT_YES
-//)
-//@Composable
-//private fun HomeScreenErrorPreview() {
-//    AudioBookComposeTheme {
-//        HomeScreen(
-//            uiState = HomeUIState.Error("Unable to load data"),
-//            onSearchIconClicked = {},
-//            onNavigateToHome = {},
-//            onNavigateToMenu = {},
-//            onNavigateToProfile = {},
-//        )
-//    }
-//}
-//
+@Preview(
+    name = "Home Screen Success Light Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Home Screen Success Dark Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+private fun HomeScreenSuccessPreview() {
+    AudioBookComposeTheme {
+        val recentlyPlayedSample = RecentlyPlayedUi(
+            title = "Sapiens: A Brief History of Humankind",
+            author = "Yuval Noah Harari",
+            imageId = R.drawable.sapiens_yuval_noah_harari,
+            remainingDuration = 18000L - 1234L
+        )
+        HomeScreen(
+            uiState = HomeUIState.Success(audioBookList),
+            recentlyPlayed = recentlyPlayedSample,
+            onAudioBookClicked = {},
+            onSearchIconClicked = {},
+            onNavigateToHome = {},
+            onNavigateToMenu = {},
+            onNavigateToProfile = {},
+        )
+
+    }
+}
+
+@Preview(
+    name = "Home Screen Loading Light Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Home Screen Loading Dark Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+private fun HomeScreenLoadingPreview() {
+    AudioBookComposeTheme {
+        HomeScreen(
+            uiState = HomeUIState.Loading,
+            recentlyPlayed = null,
+            onAudioBookClicked = {},
+            onSearchIconClicked = {},
+            onNavigateToHome = {},
+            onNavigateToMenu = {},
+            onNavigateToProfile = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Home Screen Error Light Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    name = "Home Screen Error Dark Mode",
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_YES
+)
+@Composable
+private fun HomeScreenErrorPreview() {
+    AudioBookComposeTheme {
+        HomeScreen(
+            uiState = HomeUIState.Error("Unable to load data"),
+            recentlyPlayed = null,
+            onAudioBookClicked = {},
+            onSearchIconClicked = {},
+            onNavigateToHome = {},
+            onNavigateToMenu = {},
+            onNavigateToProfile = {},
+        )
+    }
+}
+

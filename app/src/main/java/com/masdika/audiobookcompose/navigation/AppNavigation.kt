@@ -24,14 +24,16 @@ fun AppNavigation(
         composable<Screen.Home> {
             val viewModel = viewModel<HomeVIewModel>()
             val uiState by viewModel.uiState.collectAsState()
+            val recentlyPlayed by viewModel.recentlyPlayedState.collectAsState()
 
             HomeScreen(
                 uiState = uiState,
+                recentlyPlayed = recentlyPlayed,
+                onAudioBookClicked = { bookId -> viewModel.onAudioBookClicked(bookId) },
                 onSearchIconClicked = {},
                 onNavigateToHome = {},
                 onNavigateToMenu = {},
                 onNavigateToProfile = {},
-                homeViewModel = viewModel
             )
         }
     }
