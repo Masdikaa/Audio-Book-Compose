@@ -1,7 +1,7 @@
 package com.masdika.audiobookcompose.ui.screen.home.component.search
 
-import BackIcon
-import CloseIcon
+import com.masdika.audiobookcompose.ui.icon.BackIcon
+import com.masdika.audiobookcompose.ui.icon.CloseIcon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

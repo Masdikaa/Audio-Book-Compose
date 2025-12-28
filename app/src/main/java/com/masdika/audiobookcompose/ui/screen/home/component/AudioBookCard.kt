@@ -1,6 +1,5 @@
 package com.masdika.audiobookcompose.ui.screen.home.component
 
-import StarIcon
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
@@ -39,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.masdika.audiobookcompose.R
+import com.masdika.audiobookcompose.ui.icon.StarIcon
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.ui.theme.GothamProMedium
 import com.masdika.audiobookcompose.ui.theme.GothamProRegular

@@ -9,7 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.masdika.audiobookcompose.ui.screen.home.HomeScreen
+import com.masdika.audiobookcompose.ui.screen.play.PlayScreen
 import com.masdika.audiobookcompose.viewmodel.home.HomeViewModel
+import com.masdika.audiobookcompose.viewmodel.play.PlayViewModel
 
 @Composable
 fun AppNavigation(
@@ -48,6 +50,20 @@ fun AppNavigation(
                 onNavigateToProfile = {},
                 onSearchQueryChanged = viewModel::onSearchQueryChanged,
                 onSearchItemClicked = viewModel::onSearchItemClicked,
+            )
+        }
+        composable<Screen.Play> {
+            val viewModel = viewModel<PlayViewModel>()
+            val uiState by viewModel.uiState.collectAsState()
+            val sliderPositions by viewModel.sliderPosition.collectAsState()
+            val isPlaying by viewModel.isPlaying.collectAsState()
+
+            PlayScreen(
+                uiState = uiState,
+                sliderPositions = sliderPositions,
+                isPlaying = isPlaying,
+                onPlay = viewModel::play,
+                onPause = viewModel::pause
             )
         }
     }

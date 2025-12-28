@@ -114,21 +114,6 @@ fun HomeScreen(
             }
 
             is HomeUIState.Success -> {
-//                var selectedIndex by remember { mutableIntStateOf(0) }
-//                val audioBooks = uiState.audioBooks
-//                val filteredAudioBooks by remember(selectedIndex, audioBooks) {
-//                    mutableStateOf(
-//                        if (selectedIndex == 0) {
-//                            audioBooks
-//                        } else {
-//                            val selectedGenreName = genreList[selectedIndex - 1].name
-//                            audioBooks.filter { audioBook ->
-//                                audioBook.genre.any { it.name == selectedGenreName }
-//                            }
-//                        }
-//                    )
-//                }
-
                 if (isSearching) {
                     SearchUI(
                         searchQuery = searchQuery,

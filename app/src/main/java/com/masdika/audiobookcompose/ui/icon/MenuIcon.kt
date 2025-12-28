@@ -1,3 +1,5 @@
+package com.masdika.audiobookcompose.ui.icon
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector

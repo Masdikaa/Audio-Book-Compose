@@ -1,7 +1,7 @@
 package com.masdika.audiobookcompose.ui.screen.home.component.bottombar
 
-import HomeIcon
-import MenuIcon
+import com.masdika.audiobookcompose.ui.icon.HomeIcon
+import com.masdika.audiobookcompose.ui.icon.MenuIcon
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
