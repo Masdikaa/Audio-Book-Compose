@@ -14,10 +14,8 @@ class PlayViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<PlayUIState>(PlayUIState.Loading)
     val uiState = _uiState.asStateFlow()
-
-    private val _sliderPosition = MutableStateFlow(0f)
-    val sliderPosition = _sliderPosition.asStateFlow()
-
+    private val _playedDuration = MutableStateFlow<Long>(0L)
+    val playedDuration = _playedDuration.asStateFlow()
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying = _isPlaying.asStateFlow()
 
@@ -40,6 +38,10 @@ class PlayViewModel(
                 _uiState.update { PlayUIState.Error(e.message ?: "An unexpected error occurred.") }
             }
         }
+    }
+
+    fun onSliderPositionChanged(newPosition: Float) {
+        _playedDuration.value = newPosition.toLong()
     }
 
     fun play() {

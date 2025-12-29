@@ -30,8 +30,9 @@ import com.masdika.audiobookcompose.viewmodel.play.PlayUIState
 @Composable
 fun PlayScreen(
     uiState: PlayUIState,
-    sliderPositions: Float,
+    playedDuration: Long,
     isPlaying: Boolean,
+    onSliderPositionChanged: (Float) -> Unit,
     onPlay: () -> Unit,
     onPause: () -> Unit,
     onAddBookmark: () -> Unit,
@@ -50,8 +51,9 @@ fun PlayScreen(
                 title = audioBook.title,
                 author = audioBook.author,
                 totalDuration = audioBook.totalDuration,
-                sliderPosition = sliderPositions,
+                playedDuration = playedDuration,
                 isPlaying = isPlaying,
+                onSliderPositionChanged = onSliderPositionChanged,
                 onPlay = onPlay,
                 onPause = onPause,
                 onAddBookmark = onAddBookmark,
@@ -74,8 +76,9 @@ fun PlayScreenContent(
     title: String,
     author: String,
     totalDuration: Long,
-    sliderPosition: Float,
+    playedDuration: Long,
     isPlaying: Boolean,
+    onSliderPositionChanged: (Float) -> Unit,
     onPlay: () -> Unit,
     onPause: () -> Unit,
     onAddBookmark: () -> Unit,
@@ -84,7 +87,6 @@ fun PlayScreenContent(
     onForwardTrack: () -> Unit,
     onBackwardTrack: () -> Unit,
     modifier: Modifier = Modifier,
-    playedDuration: Long = 0L,
     image: Int = R.drawable.ic_launcher_background
 ) {
     Scaffold(
@@ -112,10 +114,9 @@ fun PlayScreenContent(
             )
             Spacer(Modifier.height(20.dp))
             TrackSlider(
-                sliderPosition = sliderPosition,
                 totalDuration = totalDuration,
                 playedDuration = playedDuration,
-                onSliderPositionChanged = { },
+                onSliderPositionChanged = onSliderPositionChanged,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
             Spacer(Modifier.fillMaxHeight(0.1f))
@@ -157,7 +158,6 @@ private fun PlayScreenPreview() {
             author = "Elizabeth Gilbert",
             playedDuration = 41821L,
             totalDuration = 42000L,
-            sliderPosition = 3f,
             isPlaying = false,
             onPlay = {},
             onPause = {},
@@ -166,7 +166,8 @@ private fun PlayScreenPreview() {
             onOpenVolumeControl = {},
             onForwardTrack = {},
             onBackwardTrack = {},
-            image = R.drawable.city_of_girls_elizabeth_gilbert
+            image = R.drawable.city_of_girls_elizabeth_gilbert,
+            onSliderPositionChanged = {},
         )
     }
 }

@@ -61,15 +61,16 @@ fun AppNavigation(
         composable<Screen.Play> {
             val viewModel = viewModel<PlayViewModel>()
             val uiState by viewModel.uiState.collectAsState()
-            val sliderPositions by viewModel.sliderPosition.collectAsState()
+            val playedDuration by viewModel.playedDuration.collectAsState()
             val isPlaying by viewModel.isPlaying.collectAsState()
 
             PlayScreen(
                 uiState = uiState,
-                sliderPositions = sliderPositions,
+                playedDuration = playedDuration,
                 isPlaying = isPlaying,
                 onPlay = viewModel::play,
                 onPause = viewModel::pause,
+                onSliderPositionChanged = viewModel::onSliderPositionChanged,
                 onAddBookmark = {},
                 onAddPlaylist = {},
                 onOpenVolumeControl = {},

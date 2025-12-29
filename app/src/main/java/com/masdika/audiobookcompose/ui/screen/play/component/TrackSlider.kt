@@ -38,7 +38,6 @@ import com.masdika.audiobookcompose.utils.formatDuration
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrackSlider(
-    sliderPosition: Float,
     totalDuration: Long,
     onSliderPositionChanged: (Float) -> Unit,
     modifier: Modifier = Modifier,
@@ -50,7 +49,7 @@ fun TrackSlider(
         modifier = modifier
     ) {
         Slider(
-            value = sliderPosition,
+            value = playedDuration.toFloat(),
             onValueChange = { newPosition ->
                 onSliderPositionChanged(newPosition)
             },
@@ -137,7 +136,6 @@ fun TrackSlider(
 private fun TrackSliderPreview() {
     AudioBookComposeTheme {
         TrackSlider(
-            sliderPosition = 2f,
             totalDuration = 10000,
             playedDuration = 2000,
             onSliderPositionChanged = {},
