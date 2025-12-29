@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -53,15 +52,19 @@ fun TrackSlider(
             onValueChange = { newPosition ->
                 onSliderPositionChanged(newPosition)
             },
-            valueRange = 0f..10f,
+            valueRange = 0f..totalDuration.toFloat(),
             track = { sliderState ->
                 Canvas(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(5.dp)
                 ) {
-                    val fraction =
-                        (sliderState.value - sliderState.valueRange.start) / (sliderState.valueRange.endInclusive - sliderState.valueRange.start)
+                    val range = sliderState.valueRange.endInclusive - sliderState.valueRange.start
+                    val fraction = if (range > 0) {
+                        (sliderState.value - sliderState.valueRange.start) / range
+                    } else {
+                        0f
+                    }
                     val activeWidth = size.width * fraction
 
                     drawLine(

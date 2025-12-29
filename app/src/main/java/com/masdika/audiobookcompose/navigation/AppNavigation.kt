@@ -48,9 +48,9 @@ fun AppNavigation(
                     navController.navigate(Screen.Play(audioBookId))
                 },
                 onSearchIconClicked = viewModel::onSearchIconClicked,
-                onNavigateToHome = {},
-                onNavigateToMenu = {},
-                onNavigateToProfile = {},
+                onNavigateToHome = viewModel::navigateToHome,
+                onNavigateToMenu = viewModel::navigateToMenu,
+                onNavigateToProfile = viewModel::navigateToProfile,
                 onSearchQueryChanged = viewModel::onSearchQueryChanged,
                 onSearchItemClicked = { audioBookId ->
                     viewModel.onSearchItemClicked(audioBookId)
@@ -71,11 +71,11 @@ fun AppNavigation(
                 onPlay = viewModel::play,
                 onPause = viewModel::pause,
                 onSliderPositionChanged = viewModel::onSliderPositionChanged,
-                onAddBookmark = {},
-                onAddPlaylist = {},
-                onOpenVolumeControl = {},
-                onForwardTrack = {},
-                onBackwardTrack = {},
+                onAddBookmark = viewModel::addToBookmark,
+                onAddPlaylist = viewModel::addToPlaylist,
+                onOpenVolumeControl = viewModel::openVolumeControl,
+                onForwardTrack = { viewModel.forwardBy(10) },
+                onBackwardTrack = { viewModel.rewindBy(10) },
             )
         }
     }

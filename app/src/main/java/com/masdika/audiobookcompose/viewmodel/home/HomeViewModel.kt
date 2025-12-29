@@ -1,5 +1,6 @@
 package com.masdika.audiobookcompose.viewmodel.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masdika.audiobookcompose.data.model.AudioBook
@@ -77,7 +78,7 @@ class HomeViewModel() : ViewModel() {
             } else {
                 val selectedGenreName = genreList[index - 1].name
                 audioBookList.filter { audioBook ->
-                    audioBook.genre.any() { it.name == selectedGenreName }
+                    audioBook.genre.any { it.name == selectedGenreName }
                 }
             }
 
@@ -115,6 +116,18 @@ class HomeViewModel() : ViewModel() {
 
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
+    }
+
+    fun navigateToHome() {
+        Log.i("onNavigateToHome", "Navigating to Home")
+    }
+
+    fun navigateToMenu() {
+        Log.i("onNavigateToMenu", "Navigating to Menu")
+    }
+
+    fun navigateToProfile() {
+        Log.i("onNavigateToProfile", "Navigating to Profile")
     }
 
     private fun updateRecentlyPlayed(bookId: String) {
