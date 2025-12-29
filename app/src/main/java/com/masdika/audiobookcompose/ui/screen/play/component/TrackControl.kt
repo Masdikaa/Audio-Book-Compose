@@ -1,16 +1,15 @@
 package com.masdika.audiobookcompose.ui.screen.play.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,87 +38,106 @@ fun TrackControl(
     isPlaying: Boolean,
     onPlayTrack: () -> Unit,
     onPauseTrack: () -> Unit,
+    onForwardTrack: () -> Unit,
+    onBackwardTrack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxSize()
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.size(40.dp)
+        IconButton(
+            onClick = onBackwardTrack,
+            modifier = Modifier.size(60.dp)
         ) {
-            Icon(
-                imageVector = ArrowBackwardIcon,
-                contentDescription = null,
-                tint = Night,
-                modifier = Modifier.rotate(-25f)
-            )
-            Text(
-                text = "10",
-                fontSize = 14.sp,
-                fontFamily = GothamProMedium,
-                fontWeight = FontWeight.Normal,
-                style = TextStyle(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = true
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            ) {
+                Icon(
+                    imageVector = ArrowBackwardIcon,
+                    contentDescription = null,
+                    tint = Night,
+                    modifier = Modifier
+                        .rotate(-25f)
+                        .size(40.dp)
+                )
+                Text(
+                    text = "10",
+                    fontSize = 14.sp,
+                    fontFamily = GothamProMedium,
+                    fontWeight = FontWeight.Normal,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = true
+                        ),
+                        lineHeightStyle = LineHeightStyle(
+                            trim = LineHeightStyle.Trim.Both,
+                            alignment = LineHeightStyle.Alignment.Center,
+                        )
                     ),
-                    lineHeightStyle = LineHeightStyle(
-                        trim = LineHeightStyle.Trim.Both,
-                        alignment = LineHeightStyle.Alignment.Center,
-                    )
-                ),
-                color = Night
-            )
+                    color = Night
+                )
+            }
         }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(Night)
-                .clickable {
-                    if (isPlaying) {
-                        onPauseTrack()
-                    } else {
-                        onPlayTrack()
-                    }
-                }
+        IconButton(
+            onClick = if (isPlaying) onPauseTrack else onPlayTrack,
+            modifier = Modifier.size(100.dp)
         ) {
-            Icon(
-                imageVector = if (isPlaying) PauseIcon else PlayIcon,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(20.dp)
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+                    .background(Night)
+            ) {
+                Icon(
+                    imageVector = if (isPlaying) PauseIcon else PlayIcon,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.size(40.dp)
+        IconButton(
+            onClick = onForwardTrack,
+            modifier = Modifier.size(60.dp)
         ) {
-            Icon(
-                imageVector = ArrowForwardIcon,
-                contentDescription = null,
-                tint = Night,
-                modifier = Modifier.rotate(25f)
-            )
-            Text(
-                text = "10",
-                fontSize = 14.sp,
-                fontFamily = GothamProMedium,
-                fontWeight = FontWeight.Normal,
-                style = TextStyle(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = true
+
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            ) {
+                Icon(
+                    imageVector = ArrowForwardIcon,
+                    contentDescription = null,
+                    tint = Night,
+                    modifier = Modifier
+                        .rotate(25f)
+                        .size(40.dp)
+                )
+                Text(
+                    text = "10",
+                    fontSize = 14.sp,
+                    fontFamily = GothamProMedium,
+                    fontWeight = FontWeight.Normal,
+                    style = TextStyle(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = true
+                        ),
+                        lineHeightStyle = LineHeightStyle(
+                            trim = LineHeightStyle.Trim.Both,
+                            alignment = LineHeightStyle.Alignment.Center,
+                        )
                     ),
-                    lineHeightStyle = LineHeightStyle(
-                        trim = LineHeightStyle.Trim.Both,
-                        alignment = LineHeightStyle.Alignment.Center,
-                    )
-                ),
-                color = Night
-            )
+                    color = Night
+                )
+            }
         }
     }
 }
@@ -139,6 +157,8 @@ private fun TrackControlPreview() {
                 isPlaying = false,
                 onPlayTrack = {},
                 onPauseTrack = {},
+                onForwardTrack = {},
+                onBackwardTrack = {}
             )
         }
     }

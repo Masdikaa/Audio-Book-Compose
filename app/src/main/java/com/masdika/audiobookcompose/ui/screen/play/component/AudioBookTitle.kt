@@ -16,6 +16,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +38,8 @@ fun AudioBookTitle(
     ) {
         Text(
             text = title,
-            fontSize = 28.sp,
+            textAlign = TextAlign.Center,
+            fontSize = 24.sp,
             fontFamily = GothamProMedium,
             fontWeight = FontWeight.Normal,
             style = TextStyle(
@@ -54,7 +56,8 @@ fun AudioBookTitle(
         Spacer(Modifier.height(5.dp))
         Text(
             text = author,
-            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp,
             fontFamily = GothamProRegular,
             fontWeight = FontWeight.Normal,
             color = Color.DarkGray.copy(0.7f)

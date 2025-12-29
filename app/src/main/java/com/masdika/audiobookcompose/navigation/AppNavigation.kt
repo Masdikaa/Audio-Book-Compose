@@ -43,13 +43,19 @@ fun AppNavigation(
                 audioBooks = audioBooks,
                 selectedGenreIndex = selectedGenreIndex,
                 onGenreSelected = viewModel::onGenreSelected,
-                onAudioBookClicked = viewModel::onAudioBookClicked,
+                onAudioBookClicked = { audioBookId ->
+                    viewModel.onAudioBookClicked(audioBookId)
+                    navController.navigate(Screen.Play(audioBookId))
+                },
                 onSearchIconClicked = viewModel::onSearchIconClicked,
                 onNavigateToHome = {},
                 onNavigateToMenu = {},
                 onNavigateToProfile = {},
                 onSearchQueryChanged = viewModel::onSearchQueryChanged,
-                onSearchItemClicked = viewModel::onSearchItemClicked,
+                onSearchItemClicked = { audioBookId ->
+                    viewModel.onSearchItemClicked(audioBookId)
+                    navController.navigate(Screen.Play(audioBookId))
+                },
             )
         }
         composable<Screen.Play> {
@@ -63,7 +69,12 @@ fun AppNavigation(
                 sliderPositions = sliderPositions,
                 isPlaying = isPlaying,
                 onPlay = viewModel::play,
-                onPause = viewModel::pause
+                onPause = viewModel::pause,
+                onAddBookmark = {},
+                onAddPlaylist = {},
+                onOpenVolumeControl = {},
+                onForwardTrack = {},
+                onBackwardTrack = {},
             )
         }
     }

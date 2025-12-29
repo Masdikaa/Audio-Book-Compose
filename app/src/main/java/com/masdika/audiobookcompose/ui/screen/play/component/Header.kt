@@ -24,7 +24,7 @@ fun Header(modifier: Modifier = Modifier) {
     ) {
         Box(
             modifier = Modifier
-                .height(8.dp)
+                .height(5.dp)
                 .width(70.dp)
                 .clip(RoundedCornerShape(percent = 70))
                 .background(Color.White.copy(0.7f))

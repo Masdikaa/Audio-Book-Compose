@@ -5,11 +5,9 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -20,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.masdika.audiobookcompose.R
 import com.masdika.audiobookcompose.ui.screen.play.component.AudioBookTitle
+import com.masdika.audiobookcompose.ui.screen.play.component.BottomControl
 import com.masdika.audiobookcompose.ui.screen.play.component.Header
 import com.masdika.audiobookcompose.ui.screen.play.component.PlayedImage
 import com.masdika.audiobookcompose.ui.screen.play.component.TrackControl
@@ -35,6 +34,11 @@ fun PlayScreen(
     isPlaying: Boolean,
     onPlay: () -> Unit,
     onPause: () -> Unit,
+    onAddBookmark: () -> Unit,
+    onAddPlaylist: () -> Unit,
+    onOpenVolumeControl: () -> Unit,
+    onForwardTrack: () -> Unit,
+    onBackwardTrack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (uiState) {
@@ -50,6 +54,11 @@ fun PlayScreen(
                 isPlaying = isPlaying,
                 onPlay = onPlay,
                 onPause = onPause,
+                onAddBookmark = onAddBookmark,
+                onAddPlaylist = onAddPlaylist,
+                onOpenVolumeControl = onOpenVolumeControl,
+                onForwardTrack = onForwardTrack,
+                onBackwardTrack = onBackwardTrack,
                 image = audioBook.imageID,
                 modifier = modifier
             )
@@ -69,12 +78,24 @@ fun PlayScreenContent(
     isPlaying: Boolean,
     onPlay: () -> Unit,
     onPause: () -> Unit,
+    onAddBookmark: () -> Unit,
+    onAddPlaylist: () -> Unit,
+    onOpenVolumeControl: () -> Unit,
+    onForwardTrack: () -> Unit,
+    onBackwardTrack: () -> Unit,
     modifier: Modifier = Modifier,
     playedDuration: Long = 0L,
     image: Int = R.drawable.ic_launcher_background
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        bottomBar = {
+            BottomControl(
+                onAddBookmark = onAddBookmark,
+                onAddPlaylist = onAddPlaylist,
+                onOpenVolumeControl = onOpenVolumeControl,
+            )
+        }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,33 +115,22 @@ fun PlayScreenContent(
                 sliderPosition = sliderPosition,
                 totalDuration = totalDuration,
                 playedDuration = playedDuration,
-                onSliderPositionChanged = {  },
+                onSliderPositionChanged = { },
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
-            Spacer(Modifier.fillMaxHeight(0.08f))
+            Spacer(Modifier.fillMaxHeight(0.1f))
             AudioBookTitle(
                 title = title,
                 author = author,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
-            Spacer(Modifier.fillMaxHeight(0.15f))
             TrackControl(
                 isPlaying = isPlaying,
                 onPlayTrack = onPlay,
-                onPauseTrack = onPause
+                onPauseTrack = onPause,
+                onForwardTrack = onForwardTrack,
+                onBackwardTrack = onBackwardTrack
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(
-                        JeansBlue.copy(
-                            red = 195f / 255f,
-                            green = 224f / 255f,
-                            blue = 232f / 255f
-                        )
-                    )
-            ) { }
         }
     }
 }
@@ -151,6 +161,11 @@ private fun PlayScreenPreview() {
             isPlaying = false,
             onPlay = {},
             onPause = {},
+            onAddBookmark = {},
+            onAddPlaylist = {},
+            onOpenVolumeControl = {},
+            onForwardTrack = {},
+            onBackwardTrack = {},
             image = R.drawable.city_of_girls_elizabeth_gilbert
         )
     }
