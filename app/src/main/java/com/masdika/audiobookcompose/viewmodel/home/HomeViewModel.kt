@@ -57,6 +57,7 @@ class HomeViewModel() : ViewModel() {
                     val audioBook = audioBookList.find { book -> book.id == it.audioBookId }
                     audioBook?.let { book ->
                         RecentlyPlayedUi(
+                            id = book.id,
                             title = book.title,
                             author = book.author,
                             imageId = book.imageID,
@@ -97,14 +98,6 @@ class HomeViewModel() : ViewModel() {
         _selectedGenreIndex.value = index
     }
 
-    fun onAudioBookClicked(bookId: String) {
-        updateRecentlyPlayed(bookId)
-    }
-
-    fun onSearchItemClicked(bookId: String) {
-        updateRecentlyPlayed(bookId)
-    }
-
     fun onSearchCloseClicked() {
         _isSearching.value = false
         _searchQuery.value = ""
@@ -129,13 +122,4 @@ class HomeViewModel() : ViewModel() {
     fun navigateToProfile() {
         Log.i("onNavigateToProfile", "Navigating to Profile")
     }
-
-    private fun updateRecentlyPlayed(bookId: String) {
-        val simulatedPlayPosition = 60L
-        updatePlayHistory(
-            bookId = bookId,
-            currentPosition = simulatedPlayPosition
-        )
-    }
-
 }

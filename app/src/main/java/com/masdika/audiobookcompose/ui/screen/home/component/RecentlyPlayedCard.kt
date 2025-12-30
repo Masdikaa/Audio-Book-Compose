@@ -50,6 +50,7 @@ fun RecentlyPlayedCard(
     minuteLeft: Int,
     backgroundImage: Painter,
     title: String,
+    onResume: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -58,7 +59,7 @@ fun RecentlyPlayedCard(
             .height(240.dp)
             .clip(RoundedCornerShape(percent = 12))
             .clickable {
-                // onResume
+                onResume()
             }
     ) {
         Image(
@@ -166,6 +167,7 @@ private fun RecentlyPlayedCardPreview() {
                 minuteLeft = 24,
                 backgroundImage = painterResource(R.drawable.sapiens_yuval_noah_harari),
                 title = "Sapiens. A Brief History of Humankind",
+                onResume = {}
             )
         }
     }

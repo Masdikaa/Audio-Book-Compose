@@ -66,6 +66,7 @@ fun HomeScreen(
     selectedGenreIndex: Int,
     onGenreSelected: (Int) -> Unit,
     onAudioBookClicked: (String) -> Unit,
+    onResumeRecentlyPlayed: (String) -> Unit,
     onSearchIconClicked: () -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToMenu: () -> Unit,
@@ -132,6 +133,7 @@ fun HomeScreen(
                         onSearchIconClicked = onSearchIconClicked,
                         recentlyPlayed = recentlyPlayed,
                         onAudioBookClicked = onAudioBookClicked,
+                        onResumeRecentlyPlayed = onResumeRecentlyPlayed,
                         backgroundColor = backgroundColor,
                         modifier = Modifier.padding(innerPadding)
                     )
@@ -161,6 +163,7 @@ fun HomeScreenContent(
     onSearchIconClicked: () -> Unit,
     recentlyPlayed: RecentlyPlayedUi?,
     onAudioBookClicked: (String) -> Unit,
+    onResumeRecentlyPlayed: (String) -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.background
 ) {
@@ -191,6 +194,7 @@ fun HomeScreenContent(
                         minuteLeft = minutes.toInt(),
                         backgroundImage = painterResource(id = recentlyPlayed.imageId),
                         title = recentlyPlayed.title,
+                        onResume = { onResumeRecentlyPlayed(recentlyPlayed.id) }
                     )
                 } else {
                     Text(
@@ -280,6 +284,7 @@ fun HomeScreenContent(
 private fun HomeScreenSuccessPreview() {
     AudioBookComposeTheme {
         val recentlyPlayedSample = RecentlyPlayedUi(
+            id = "1",
             title = "Sapiens: A Brief History of Humankind",
             author = "Yuval Noah Harari",
             imageId = R.drawable.sapiens_yuval_noah_harari,
@@ -302,6 +307,7 @@ private fun HomeScreenSuccessPreview() {
             searchResults = emptyList(),
             onSearchQueryChanged = {},
             onSearchItemClicked = {},
+            onResumeRecentlyPlayed = {}
         )
 
     }
@@ -341,6 +347,7 @@ private fun HomeScreenLoadingPreview() {
             searchResults = emptyList(),
             onSearchQueryChanged = {},
             onSearchItemClicked = {},
+            onResumeRecentlyPlayed = {}
         )
     }
 }
@@ -379,6 +386,7 @@ private fun HomeScreenErrorPreview() {
             searchResults = emptyList(),
             onSearchQueryChanged = {},
             onSearchItemClicked = {},
+            onResumeRecentlyPlayed = {}
         )
     }
 }

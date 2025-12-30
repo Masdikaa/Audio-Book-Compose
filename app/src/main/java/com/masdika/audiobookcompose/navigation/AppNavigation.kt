@@ -44,7 +44,9 @@ fun AppNavigation(
                 selectedGenreIndex = selectedGenreIndex,
                 onGenreSelected = viewModel::onGenreSelected,
                 onAudioBookClicked = { audioBookId ->
-                    viewModel.onAudioBookClicked(audioBookId)
+                    navController.navigate(Screen.Play(audioBookId))
+                },
+                onResumeRecentlyPlayed = { audioBookId ->
                     navController.navigate(Screen.Play(audioBookId))
                 },
                 onSearchIconClicked = viewModel::onSearchIconClicked,
@@ -53,7 +55,6 @@ fun AppNavigation(
                 onNavigateToProfile = viewModel::navigateToProfile,
                 onSearchQueryChanged = viewModel::onSearchQueryChanged,
                 onSearchItemClicked = { audioBookId ->
-                    viewModel.onSearchItemClicked(audioBookId)
                     navController.navigate(Screen.Play(audioBookId))
                 },
             )

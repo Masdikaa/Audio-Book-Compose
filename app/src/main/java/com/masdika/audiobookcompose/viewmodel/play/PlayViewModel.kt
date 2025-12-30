@@ -26,6 +26,9 @@ class PlayViewModel(
     private val audioBookId: String = checkNotNull(savedStateHandle["audioBookId"])
 
     init {
+        val history = HistoryRepository.getHistoryForBook(audioBookId)
+        _playedDuration.value = history?.lastPlayedPositionInSeconds ?: 0L
+
         getAudioBookById(audioBookId)
         startPlayback()
     }
