@@ -1,6 +1,7 @@
 package com.masdika.audiobookcompose.ui.screen.play.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masdika.audiobookcompose.R
 import com.masdika.audiobookcompose.ui.icon.ArrowBackwardIcon
 import com.masdika.audiobookcompose.ui.icon.ArrowForwardIcon
 import com.masdika.audiobookcompose.ui.icon.PauseIcon
@@ -32,6 +34,7 @@ import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.ui.theme.GothamProMedium
 import com.masdika.audiobookcompose.ui.theme.JeansBlue
 import com.masdika.audiobookcompose.ui.theme.Night
+import com.masdika.audiobookcompose.ui.theme.SmokeWhite
 
 @Composable
 fun TrackControl(
@@ -42,6 +45,8 @@ fun TrackControl(
     onBackwardTrack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val onBackground = if (isSystemInDarkTheme()) SmokeWhite else Night
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround,
@@ -59,8 +64,8 @@ fun TrackControl(
             ) {
                 Icon(
                     imageVector = ArrowBackwardIcon,
-                    contentDescription = null,
-                    tint = Night,
+                    contentDescription = stringResource(R.string.arrow_backward_icon),
+                    tint = onBackground,
                     modifier = Modifier
                         .rotate(-25f)
                         .size(40.dp)
@@ -79,7 +84,7 @@ fun TrackControl(
                             alignment = LineHeightStyle.Alignment.Center,
                         )
                     ),
-                    color = Night
+                    color = onBackground
                 )
             }
         }
@@ -92,13 +97,13 @@ fun TrackControl(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(CircleShape)
-                    .background(Night)
+                    .background(onBackground)
             ) {
                 Icon(
                     imageVector = if (isPlaying) PauseIcon else PlayIcon,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(20.dp)
+                    contentDescription = stringResource(R.string.play_and_pause_icon),
+                    tint = if (isSystemInDarkTheme()) Night else SmokeWhite,
+                    modifier = Modifier.size(25.dp)
                 )
             }
         }
@@ -115,8 +120,8 @@ fun TrackControl(
             ) {
                 Icon(
                     imageVector = ArrowForwardIcon,
-                    contentDescription = null,
-                    tint = Night,
+                    contentDescription = stringResource(R.string.arrow_forward_icon),
+                    tint = onBackground,
                     modifier = Modifier
                         .rotate(25f)
                         .size(40.dp)
@@ -135,7 +140,7 @@ fun TrackControl(
                             alignment = LineHeightStyle.Alignment.Center,
                         )
                     ),
-                    color = Night
+                    color = onBackground
                 )
             }
         }

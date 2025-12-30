@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.masdika.audiobookcompose.data.model.audioBookList
+import com.masdika.audiobookcompose.data.repository.HistoryRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,13 +20,14 @@ class PlayViewModel(
     val uiState = _uiState.asStateFlow()
     private val _playedDuration = MutableStateFlow(0L)
     val playedDuration = _playedDuration.asStateFlow()
-    private val _isPlaying = MutableStateFlow(false)
+    private val _isPlaying = MutableStateFlow(true)
     val isPlaying = _isPlaying.asStateFlow()
     private var playbackJob: Job? = null
     private val audioBookId: String = checkNotNull(savedStateHandle["audioBookId"])
 
     init {
         getAudioBookById(audioBookId)
+        startPlayback()
     }
 
     fun getAudioBookById(audioBookId: String) {
@@ -115,5 +117,9 @@ class PlayViewModel(
     override fun onCleared() {
         super.onCleared()
         playbackJob?.cancel()
+        HistoryRepository.updatePlayHistory(
+            bookId = audioBookId,
+            currentPosition = _playedDuration.value
+        )
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -74,7 +75,7 @@ fun AudioBookCard(
     ) {
         Image(
             painter = painterResource(image),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.audiobook_image),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .height(160.dp)
@@ -123,7 +124,7 @@ fun AudioBookCard(
                 ) {
                     Icon(
                         imageVector = StarIcon,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.star_icon),
                         tint = Color(0xFFFFC107),
                         modifier = Modifier.size(
                             with(LocalDensity.current) { 14.sp.toDp() }

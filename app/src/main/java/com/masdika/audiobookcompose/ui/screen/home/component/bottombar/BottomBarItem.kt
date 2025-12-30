@@ -1,6 +1,5 @@
 package com.masdika.audiobookcompose.ui.screen.home.component.bottombar
 
-import com.masdika.audiobookcompose.ui.icon.HomeIcon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.masdika.audiobookcompose.ui.icon.HomeIcon
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 
 @Composable
@@ -44,7 +44,7 @@ private fun BottomBarItemPreview() {
         ) {
             Icon(
                 imageVector = HomeIcon,
-                contentDescription = null,
+                contentDescription = "Home Icon",
                 tint = Color.LightGray,
                 modifier = Modifier.size(24.dp)
             )

@@ -1,7 +1,5 @@
 package com.masdika.audiobookcompose.ui.screen.home.component.bottombar
 
-import com.masdika.audiobookcompose.ui.icon.HomeIcon
-import com.masdika.audiobookcompose.ui.icon.MenuIcon
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -24,8 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.masdika.audiobookcompose.R
+import com.masdika.audiobookcompose.ui.icon.HomeIcon
+import com.masdika.audiobookcompose.ui.icon.MenuIcon
 import com.masdika.audiobookcompose.ui.theme.Night
 
 @Composable
@@ -47,7 +48,7 @@ fun BottomNavigation(
         ) {
             Icon(
                 imageVector = HomeIcon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.home_icon),
                 tint = backgroundColorAnimation(selectedIndex, 0),
                 modifier = Modifier.size(24.dp)
             )
@@ -57,7 +58,7 @@ fun BottomNavigation(
         ) {
             Icon(
                 imageVector = MenuIcon,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.menu_icon),
                 tint = backgroundColorAnimation(selectedIndex, 1),
                 modifier = Modifier.size(24.dp)
             )
@@ -76,7 +77,7 @@ fun BottomNavigation(
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_launcher_background),
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.profile_icon),
                     modifier = Modifier
                         .padding(2.dp)
                         .clip(CircleShape)

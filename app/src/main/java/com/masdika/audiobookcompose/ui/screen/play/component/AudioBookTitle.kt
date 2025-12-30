@@ -1,6 +1,9 @@
 package com.masdika.audiobookcompose.ui.screen.play.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +28,7 @@ import com.masdika.audiobookcompose.ui.theme.GothamProMedium
 import com.masdika.audiobookcompose.ui.theme.GothamProRegular
 import com.masdika.audiobookcompose.ui.theme.JeansBlue
 import com.masdika.audiobookcompose.ui.theme.Night
+import com.masdika.audiobookcompose.ui.theme.SmokeWhite
 
 @Composable
 fun AudioBookTitle(
@@ -32,6 +36,8 @@ fun AudioBookTitle(
     author: String,
     modifier: Modifier = Modifier
 ) {
+    val onBackground = if (isSystemInDarkTheme()) SmokeWhite else Night
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
@@ -51,7 +57,7 @@ fun AudioBookTitle(
                     alignment = LineHeightStyle.Alignment.Center,
                 )
             ),
-            color = Night
+            color = onBackground
         )
         Spacer(Modifier.height(5.dp))
         Text(
@@ -60,7 +66,7 @@ fun AudioBookTitle(
             fontSize = 18.sp,
             fontFamily = GothamProRegular,
             fontWeight = FontWeight.Normal,
-            color = Color.DarkGray.copy(0.7f)
+            color = if (isSystemInDarkTheme()) Color.Gray.copy(0.6f) else Color.DarkGray.copy(0.7f)
         )
     }
 }
@@ -69,6 +75,13 @@ fun AudioBookTitle(
     showBackground = true,
     widthDp = 425,
     heightDp = 944,
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Preview(
+    showBackground = true,
+    widthDp = 425,
+    heightDp = 944,
+    uiMode = UI_MODE_NIGHT_YES
 )
 @Composable
 private fun AudioBookTitlePreview() {

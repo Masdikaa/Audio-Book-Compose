@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Audio Book Compose</string>
+    <string name="audiobook_image">Audiobook image</string>
+    <string name="home_icon">Home Icon</string>
+    <string name="menu_icon">Menu Icon</string>
+    <string name="profile_icon">Profile Icon</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="arrow_backward_icon">Arrow Backward Icon</string>
+    <string name="play_and_pause_icon">Play and Pause Icon</string>
+    <string name="arrow_forward_icon">Arrow Forward Icon</string>
+    <string name="bookmark_icon">Bookmark Icon</string>
+    <string name="add_icon">Add Icon</string>
+    <string name="speaker_icon">Speaker Icon</string>
+    <string name="star_icon">Star Icon</string>
 </resources>

@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -56,13 +57,13 @@ fun RecentlyPlayedCard(
             .fillMaxWidth()
             .height(240.dp)
             .clip(RoundedCornerShape(percent = 12))
-            .clickable{
-
+            .clickable {
+                // onResume
             }
     ) {
         Image(
             painter = backgroundImage,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.audiobook_image),
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
@@ -163,7 +164,7 @@ private fun RecentlyPlayedCardPreview() {
                 author = "Yuval Noah Harari",
                 hourLeft = 8,
                 minuteLeft = 24,
-                backgroundImage = painterResource(R.drawable.sample),
+                backgroundImage = painterResource(R.drawable.sapiens_yuval_noah_harari),
                 title = "Sapiens. A Brief History of Humankind",
             )
         }

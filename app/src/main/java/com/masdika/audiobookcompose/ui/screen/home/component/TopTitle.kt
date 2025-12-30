@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masdika.audiobookcompose.R
 import com.masdika.audiobookcompose.ui.icon.SearchIcon
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.ui.theme.GothamProBold
@@ -60,7 +62,7 @@ fun TopTitle(
         )
         Icon(
             imageVector = SearchIcon,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.search_icon),
             tint = onBackgroundColor,
             modifier = modifier
                 .size(iconSize + 5.dp)
