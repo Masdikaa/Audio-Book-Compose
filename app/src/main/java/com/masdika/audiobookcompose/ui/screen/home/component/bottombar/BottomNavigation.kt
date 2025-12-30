@@ -76,7 +76,7 @@ fun BottomNavigation(
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_launcher_background),
+                    painter = painterResource(R.drawable.profile_image),
                     contentDescription = stringResource(R.string.profile_icon),
                     modifier = Modifier
                         .padding(2.dp)
