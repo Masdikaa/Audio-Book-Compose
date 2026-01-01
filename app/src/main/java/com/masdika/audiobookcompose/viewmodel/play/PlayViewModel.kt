@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.masdika.audiobookcompose.data.model.audioBookList
+import com.masdika.audiobookcompose.data.dummy.audioBookList
+import com.masdika.audiobookcompose.data.repository.AudioBookRepository
 import com.masdika.audiobookcompose.data.repository.HistoryRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -36,7 +37,7 @@ class PlayViewModel(
     fun getAudioBookById(audioBookId: String) {
         viewModelScope.launch {
             try {
-                val audioBook = audioBookList.find { it.id == audioBookId }
+                val audioBook = AudioBookRepository.getAudioBookById(audioBookId)
                 if (audioBook != null) {
                     _uiState.update { PlayUIState.Success(audioBook) }
                 } else {
@@ -113,7 +114,7 @@ class PlayViewModel(
         Log.i("onAddPlaylist", "Added ${audioBook?.title} to playlist")
     }
 
-    fun openVolumeControl(){
+    fun openVolumeControl() {
         Log.i("onOpenVolumeControl", "Opened volume control")
     }
 

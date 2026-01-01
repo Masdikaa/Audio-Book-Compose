@@ -3,12 +3,11 @@ package com.masdika.audiobookcompose.viewmodel.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.masdika.audiobookcompose.data.dummy.audioBookList
+import com.masdika.audiobookcompose.data.dummy.genreList
 import com.masdika.audiobookcompose.data.model.AudioBook
 import com.masdika.audiobookcompose.data.model.RecentlyPlayedUi
-import com.masdika.audiobookcompose.data.model.audioBookList
-import com.masdika.audiobookcompose.data.model.genreList
 import com.masdika.audiobookcompose.data.repository.HistoryRepository
-import com.masdika.audiobookcompose.data.repository.HistoryRepository.updatePlayHistory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

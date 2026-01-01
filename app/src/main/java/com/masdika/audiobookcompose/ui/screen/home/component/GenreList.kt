@@ -26,8 +26,8 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masdika.audiobookcompose.data.dummy.genreList
 import com.masdika.audiobookcompose.data.model.Genre
-import com.masdika.audiobookcompose.data.model.genreList
 import com.masdika.audiobookcompose.ui.theme.AudioBookComposeTheme
 import com.masdika.audiobookcompose.ui.theme.GothamProRegular
 import com.masdika.audiobookcompose.ui.theme.Night
